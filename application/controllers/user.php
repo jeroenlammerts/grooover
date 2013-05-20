@@ -70,14 +70,37 @@ class User_Controller extends Base_Controller
 			$password = $input['password'];
 			$password = Hash::make($password);
 
+			$activation_code = Str::random(32);
+
 			$user = new User;
 			$user->first_name = $input['first_name'];
 			$user->last_name = $input['last_name'];
 			$user->email = $input['email'];
 			$user->password = $password;
+			$user->activation_code = $activation_code;
 			$user->save();
 
-			// sent mail
+			$mailer = IoC::resolve('phpmailer');
+			try {
+
+				$data = array(
+					'subject' => 'Activation',
+					'activation_code' => $activation_code
+				);
+
+				$mailer->Subject = $data['subject'];
+				$mailer->Body = View::make('email.activate')
+					->with('subject', $data['subject'])
+					->with('activation_code', $data['activation_code'])
+					->render();
+				$mailer->AddAddress($user->email, $user->first_name . ' ' . $user->last_name);
+				if(!$mailer->Send()) {
+					echo $error = 'Mail error: '.$mail->ErrorInfo; 
+				}
+			} catch (Exception $e) {
+			    echo 'Message was not sent.';
+			    echo 'Mailer error: ' . $e->getMessage();
+			}
 
 			return Redirect::to('register_finished');
 		}
@@ -96,10 +119,18 @@ class User_Controller extends Base_Controller
 		return Redirect::to('/'); 
 	}
 
-	public function get_activate()
+	public function get_activate($user_id, $activation_code)
 	{
-		
-		echo 'test';
+		$user = User::find($user_id);
+		if($user->activation_code == $activation_code){
+			$user->activated = 1;
+			$user->save();
+
+			return Redirect::to('login');
+
+		} else {
+			return Redirect::to('/');
+		}
 
 	}
 

@@ -32,32 +32,6 @@ class Home_Controller extends Base_Controller {
 
 	public function action_index()
 	{
-
-
-
-			$mailer = IoC::resolve('phpmailer');
-			try {
-
-				$data = array(
-					'subject' => 'Activation',
-					'activation_code' => 'YUH&FJ*(^bh'
-				);
-
-				$mailer->Subject = $data['subject'];
-				$mailer->Body = View::make('email.activate')
-					->with('subject', $data['subject'])
-					->with('activation_code', $data['activation_code'])
-					->render();
-				$mailer->AddAddress('jeroenlammerts@gmail.com');
-				if(!$mailer->Send()) {
-					echo $error = 'Mail error: '.$mail->ErrorInfo; 
-				}
-			} catch (Exception $e) {
-			    echo 'Message was not sent.';
-			    echo 'Mailer error: ' . $e->getMessage();
-			}
-
-
 		$title = "Home";
 		return View::make('home.index')
 			->with('title', $title);
