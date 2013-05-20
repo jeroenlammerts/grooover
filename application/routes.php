@@ -32,10 +32,20 @@
 |
 */
 
-Route::get('/', function()
-{
-	return View::make('home.index');
-});
+Route::get('/', array('as' => 'home', 'uses' => 'home@index'));
+Route::get('patterns', array('as' => 'patterns', 'uses' => 'home@index'));
+Route::get('editor', array('as' => 'editor', 'uses' => 'home@index'));
+Route::get('about', array('as' => 'about', 'uses' => 'home@index'));
+Route::get('help', array('as' => 'help', 'uses' => 'home@index'));
+
+Route::get('login', 'user@index');
+Route::get('register', array('as' => 'register', 'uses' => 'user@register'));
+Route::get('profile', 'user@profile');
+Route::get('logout', array('as' => 'logout', 'uses' => 'user@logout'));
+Route::get('forgot-password', array('as' => 'forgot_password', 'uses' => 'home@index'));
+
+Route::post('login', 'user@index');
+Route::post('register', 'user@register');
 
 /*
 |--------------------------------------------------------------------------

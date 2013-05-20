@@ -1,0 +1,47 @@
+body { /*background: #dfdfdf;*/ }
+
+.navbar-inner .input-append, .navbar-inner .input-prepend { margin-bottom: 0; }
+.navbar-inner input.span2 { width: 215px; }
+
+header { /*margin-top: 41px; background: #ececec; padding: 10px 0 10px 0;*/ }
+header h1 { width: 324px; height: 88px; background: url(../img/logo.png) no-repeat; text-indent: -9999em; margin: 10px 0 10px 0; }
+header .navbar { margin-bottom: 10px; }
+header .breadcrumb { background: none; padding: 8px 0; }
+
+section.content {  }
+
+/* Editor */
+#editor_info label { width: 60px; }
+#editor_info select { width: 162px; }
+#editor_info .row { margin-bottom: 10px; }
+
+#editor_wrap { margin-top: 20px; }
+#editor_container { overflow: auto; }
+#editor { width: 2000px; /*height: 250px; /*background: #ececec;*/ }
+#editor > table { width: auto; float: left; margin-right: 15px; }
+#editor_wrap .table tr > td { height: 20px; }
+#editor_wrap table tr.first td { border: 0; height: 33px; vertical-align: bottom; }
+#editor table .btn-group { display: none; }
+#editor table:hover .btn-group { display: block; }
+#editor table.count { margin-left: 6px; }
+#editor table tr td table { width: 100%; }
+#editor table tr td table td { padding: 0; border: 0; }
+#editor table tr td table td input[type="text"] { width: 20px; height: 20px; text-align: center; padding: 0; font-family: Courier; font-size: 16px; border: 0; margin: 0; box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none;  }
+#editor table tr td table td input[type="text"]:hover, #editor table tr td table td input[type="text"]:focus { cursor: pointer; background: #ececec; }
+
+#editor_contols { margin-top: 20px; }
+
+#editor_instruments td { text-align: right; }
+/*#editor_instruments .btn-group { display: none; }
+#editor_instruments:hover .btn-group { display: block; }*/
+#editor_instruments td .dropdown-menu { text-align: left; }
+#editor_instruments .popover table { margin: 0; }
+#editor_instruments .popover td { text-align: left; border: 0; }
+
+/* Home */
+#home_intro { margin-bottom: 20px; }
+
+/* Patterns */
+#pattern_search form { background-color: #ececec; -webkit-border-radius: 6px; -moz-border-radius: 6px; border-radius: 6px; padding: 10px; }
+#pattern_search label { margin-right: 8px; }
+#pattern_search select { margin-right: 8px; }
