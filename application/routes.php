@@ -40,6 +40,7 @@ Route::get('help', array('as' => 'help', 'uses' => 'home@index'));
 
 Route::get('login', 'user@index');
 Route::get('register', array('as' => 'register', 'uses' => 'user@register'));
+Route::get('register-activate', array('as' => 'register_finished', 'uses' => 'user@register_finished'));
 Route::get('profile', 'user@profile');
 Route::get('logout', array('as' => 'logout', 'uses' => 'user@logout'));
 Route::get('forgot-password', array('as' => 'forgot_password', 'uses' => 'home@index'));

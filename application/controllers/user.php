@@ -43,6 +43,12 @@ class User_Controller extends Base_Controller
 		return View::make('user.register')
 			->with('title', $title);
 	}
+	public function get_register_finished()
+	{
+		$title = "Activate account";
+		return View::make('user.activate')
+			->with('title', $title);
+	}
 
 	public function post_register()
 	{
@@ -71,7 +77,7 @@ class User_Controller extends Base_Controller
 			$user->password = $password;
 			$user->save();
 
-			return Redirect::to('login');
+			return Redirect::to('register_finished');
 		}
 	}
 

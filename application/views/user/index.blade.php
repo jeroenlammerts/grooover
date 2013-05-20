@@ -3,7 +3,7 @@
 
 <div class="row">
 	<div class="span12">
-		<h2>Register</h2>
+		<h2>Login</h2>
 		{{ Form::open('login') }}
 			<fieldset>
 				<legend>Please fill in your information below to login Grooover.</legend>
