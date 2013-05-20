@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en-US">
 <head>
-	<title>Grooover | grooves, fills, breaks | {{ $title }}</title>
+	<title>Grooover | grooves, fills, breaks | @if(isset($title)) {{ $title }} @endif</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	{{ HTML::style('css/bootstrap.min.css') }}

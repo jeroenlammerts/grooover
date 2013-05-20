@@ -77,6 +77,8 @@ class User_Controller extends Base_Controller
 			$user->password = $password;
 			$user->save();
 
+			// sent mail
+
 			return Redirect::to('register_finished');
 		}
 	}
@@ -92,6 +94,13 @@ class User_Controller extends Base_Controller
 	{
 		Auth::logout();
 		return Redirect::to('/'); 
+	}
+
+	public function get_activate()
+	{
+		
+		echo 'test';
+
 	}
 
 }
