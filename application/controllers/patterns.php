@@ -11,23 +11,28 @@ class Patterns_Controller extends Base_Controller
 						->join('songs', 'songs.id', '=', 'patterns.song_id')
 						->join('artists', 'songs.artist_id', '=', 'artists.id')
 						->join('genres', 'genres.id', '=', 'patterns.genre_id')
-						->select(array('songs.name as song', 'artists.name as artist', 'genres.name as genre'))
+						->join('pattern_types', 'pattern_types.id', '=', 'patterns.pattern_type_id')
+						->select(array('songs.name as song', 'artists.name as artist', 'genres.name as genre', 'time', 'pattern_types.name as type'))
 						->order_by('artists.name', 'asc')
 						->order_by('songs.name', 'asc')
-						->paginate(5);
+						->paginate(10);
 
+		/*$patterns = Pattern::with('song')->order_by('id', 'asc')->paginate(5);
+		$patterns = Paginator::make($patterns, count($patterns), 5);*/
 
-
-		//$patterns = Pattern::with('song')->order_by('id', 'asc')->paginate(5);
-		//$patterns = Paginator::make($patterns, count($patterns), 5);
-
-		//rint_r($patterns);
-		//die();
+		$pattern_types = DB::table('pattern_types')->order_by('name', 'asc')->get();
+		$genres = DB::table('genres')->order_by('name', 'asc')->get();
+		$artists = DB::table('artists')->order_by('name', 'asc')->get();
+		$songs = DB::table('songs')->order_by('name', 'asc')->get();
 
 		$title = "Patterns";
 		return View::make('patterns.index')
 			->with('title', $title)
-			->with('patterns', $patterns);
+			->with('patterns', $patterns)
+			->with('pattern_types', $pattern_types)
+			->with('genres', $genres)
+			->with('artists', $artists)
+			->with('songs', $songs);
 	}
 
 	public function get_editor()

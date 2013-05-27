@@ -14,10 +14,10 @@
 					<label class="control-label" for="type">Type</label>
 					<div class="controls">
 						<select class="input-medium" name="type" id="type">
-							<option value="1">All types</option>
-							<option value="1">Groove</option>
-							<option value="2">Fill</option>
-							<option value="3">Break</option>
+							<option value="">- All types -</option>
+							@foreach($pattern_types as $type)
+							<option value="{{ $type->id }}">{{ $type->name }}</option>
+							@endforeach
 						</select>
 					</div>
 				</div>
@@ -25,10 +25,10 @@
 					<label class="control-label" for="genre">Genre</label>
 					<div class="controls">
 						<select class="input-medium" name="genre" id="genre">
-							<option value="1">All genres</option>
-							<option value="1">Pop</option>
-							<option value="2">Rock</option>
-							<option value="3">Metal</option>
+							<option value="">- All genres -</option>
+							@foreach($genres as $genre)
+							<option value="{{ $genre->id }}">{{ $genre->name }}</option>
+							@endforeach
 						</select>
 					</div>
 				</div>
@@ -36,9 +36,10 @@
 					<label class="control-label" for="artist">Artist</label>
 					<div class="controls">
 						<select class="input-medium" name="artist" id="artist">
-							<option value="1">All artists</option>
-							<option value="2">Black Keys</option>
-							<option value="3">Foo Fighters</option>
+							<option value="">- All artists -</option>
+							@foreach($artists as $artist)
+							<option value="{{ $artist->id }}">{{ $artist->name }}</option>
+							@endforeach
 						</select>
 					</div>
 				</div>
@@ -46,10 +47,10 @@
 					<label class="control-label" for="song">Song</label>
 					<div class="controls">
 						<select class="input-medium" name="song" id="song">
-							<option value="1">All songs</option>
-							<option value="1">Eigen</option>
-							<option value="2">Gold On The Ceiling</option>
-							<option value="3">All My Life</option>
+							<option value="">- All songs -</option>
+							@foreach($songs as $song)
+							<option value="{{ $song->id }}">{{ $song->name }}</option>
+							@endforeach
 						</select>
 					</div>
 				</div>
@@ -83,9 +84,9 @@
 				@foreach($patterns->results as $pattern)
 				<tr>
 					<td><a href="/index.php?page=pattern">{{ $pattern->artist }} - {{ $pattern->song }}</a></td>
-					<td><a href="/index.php?page=pattern">1:15</a></td>
-					<td><a href="/index.php?page=pattern">Fill</a></td>
-					<td><a href="/index.php?page=pattern">Pop</a></td>
+					<td><a href="/index.php?page=pattern">{{ $pattern->time }}</a></td>
+					<td><a href="/index.php?page=pattern">{{ $pattern->type }}</a></td>
+					<td><a href="/index.php?page=pattern">{{ $pattern->genre }}</a></td>
 					<td>
 						<i class="icon-star"></i>
 						<i class="icon-star"></i>
