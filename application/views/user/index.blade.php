@@ -20,10 +20,17 @@
 					</div>
 				</div>
 				<div class="control-group">
+					{{ Form::label('remember_me', 'Remember me') }}
+					{{ Form::checkbox('remember_me', '1'); }}
+				</div>				
+				<div class="control-group">
 					<div class="controls">
 						{{ Form::submit('Login', array('class' => 'btn')) }}
 					</div>
 				</div>
+				<div class="control-group">
+					<a href="{{ URL::to_route('forgot_password') }}">Forgot password?</a>
+				</div>				
 			</fieldset>
 		{{ Form::close() }}
 	</div>

@@ -213,15 +213,33 @@ Email on Acid - http://www.emailonacid.com/blog/details/C18/doctype_-_the_black_
 		<!-- Tables are the most common way to format your email consistently. Set your table widths inside cells and in most cases reset cellpadding, cellspacing, and border to zero. Use nested tables as a way to space effectively in your message. -->
 		<table cellpadding="0" cellspacing="0" border="0" align="center">
 			<tr>
-				<td width="200" valign="top">1</td>
-				<td width="200" valign="top">2</td>
-				<td width="200" valign="top">3</td>
+				<td width="600" valign="top">
+					<a href="http://www.grooover.com" target ="_blank">{{ HTML::image('img/mail_logo.jpg', 'Grooover') }}</a>
+				</td>
 			</tr>
-		</table>
-
-		<!-- End example table -->
-
-		@yield('content')
+			<tr>
+				<td width="600" valign="top">
+					&nbsp;
+				</td>
+			</tr>
+			<tr>
+				<td width="600" valign="top">
+					@yield('content')
+				</td>
+			</tr>
+			<tr>
+				<td width="600" valign="top">
+					&nbsp;
+				</td>
+			</tr>			
+			<tr>
+				<td width="600" valign="top" style="color: #ff9c00;">
+					<a href="http://www.grooover.com" target ="_blank" title="Grooover" style="color: #ff9c00;">Grooover</a> | 
+					<a href="http://www.grooover.com/disclaimer" target ="_blank" title="Grooover" style="color: #ff9c00;">Disclaimer</a> | 
+					<a href="http://www.grooover.com/contact" target ="_blank" title="Grooover" style="color: #ff9c00;">Contact</a>
+				</td>
+			</tr>			
+		</table>		
 
 		<!-- Yahoo Link color fix updated: Simply bring your link styling inline. 
 		<a href="http://htmlemailboilerplate.com" target ="_blank" title="Styling Links" style="color: orange; text-decoration: none;">Coloring Links appropriately</a>

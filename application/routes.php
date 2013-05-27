@@ -33,21 +33,21 @@
 */
 
 Route::get('/', array('as' => 'home', 'uses' => 'home@index'));
-Route::get('patterns', array('as' => 'patterns', 'uses' => 'home@index'));
-Route::get('editor', array('as' => 'editor', 'uses' => 'home@index'));
-Route::get('about', array('as' => 'about', 'uses' => 'home@index'));
-Route::get('help', array('as' => 'help', 'uses' => 'home@index'));
-
-Route::get('login', 'user@index');
+Route::get('patterns', array('as' => 'patterns', 'uses' => 'patterns@index'));
+Route::get('editor', array('as' => 'editor', 'uses' => 'patterns@editor'));
+Route::get('about', array('as' => 'about', 'uses' => 'home@about'));
+//Route::get('help', array('as' => 'help', 'uses' => 'home@index'));
+Route::get('login', array('as' => 'login', 'uses' => 'user@index'));
 Route::get('register', array('as' => 'register', 'uses' => 'user@register'));
 Route::get('register-activate', array('as' => 'register_finished', 'uses' => 'user@register_finished'));
 Route::get('activate/(:num)/(:all)', array('as' => 'activate', 'uses' => 'user@activate'));
-Route::get('profile', 'user@profile');
+Route::get('profile', array('as' => 'profile', 'uses' => 'user@profile'));
 Route::get('logout', array('as' => 'logout', 'uses' => 'user@logout'));
-Route::get('forgot-password', array('as' => 'forgot_password', 'uses' => 'home@index'));
+Route::get('forgot-password', array('as' => 'forgot_password', 'uses' => 'user@forgot_pass'));
 
 Route::post('login', 'user@index');
 Route::post('register', 'user@register');
+Route::post('forgot_password', 'user@forgot_pass');
 
 /*
 |--------------------------------------------------------------------------

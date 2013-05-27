@@ -29,7 +29,6 @@
 								<li{{ Request::route()->is('patterns') ? ' class="active"' : '' }}><a href="{{ URL::to_route('patterns') }}">Patterns</a></li>
 								<li{{ Request::route()->is('editor') ? ' class="active"' : '' }}><a href="{{ URL::to_route('editor') }}">Editor</a></li>
 								<li{{ Request::route()->is('about') ? ' class="active"' : '' }}><a href="{{ URL::to_route('about') }}">About</a></li>
-								<li{{ Request::route()->is('help') ? ' class="active"' : '' }}><a href="{{ URL::to_route('help') }}">Help</a></li>
 							</ul>
 							<form class="navbar-search">
 								<div class="input-append">
@@ -58,8 +57,8 @@
 										{{ Form::open('login') }}
 											{{ Form::text('email', '', array('class' => '', 'placeholder' => 'Email')) }}
 											{{ Form::password('password', array('class' => '', 'placeholder' => 'Password')) }}
-											{{ Form::checkbox('remember_me', '1'); }}
 											{{ Form::label('remember_me', 'Remember me') }}
+											{{ Form::checkbox('remember_me', '1'); }}
 											{{ Form::submit('Login', array('class' => 'btn btn-block')) }}
 
 											<a href="{{ URL::to_route('forgot_password') }}">Forgot password?</a>
@@ -72,7 +71,7 @@
 					</div>
 				</div>
 			</div>
-			<div class="row">
+			<!--<div class="row">
 				<div class="span12">
 					<ul class="breadcrumb">
 						<li><a href="#">Home</a> <span class="divider">/</span></li>
@@ -80,7 +79,7 @@
 						<li class="active">Fills</li>
 					</ul>	
 				</div>					
-			</div>					
+			</div>-->					
 		</div>
 	</header>
 	
