@@ -13,6 +13,10 @@ class Patterns_Controller extends Base_Controller
 
 	public function get_editor()
 	{
+		
+		// test patterns
+
+
 		$title = "Editor";
 		return View::make('editor.index')
 			->with('title', $title);
