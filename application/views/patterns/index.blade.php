@@ -80,6 +80,24 @@
 				</tr>
 			</thead>
 			<tbody>
+				@foreach($patterns->results as $pattern)
+				<tr>
+					<td><a href="/index.php?page=pattern">{{ $pattern->artist }} - {{ $pattern->song }}</a></td>
+					<td><a href="/index.php?page=pattern">1:15</a></td>
+					<td><a href="/index.php?page=pattern">Fill</a></td>
+					<td><a href="/index.php?page=pattern">Pop</a></td>
+					<td>
+						<i class="icon-star"></i>
+						<i class="icon-star"></i>
+						<i class="icon-star"></i>
+						<i class="icon-star-empty"></i>
+						<i class="icon-star-empty"></i>
+					</td>
+					<td><i class="icon-facetime-video"></i></td>
+				</tr>	
+				@endforeach
+
+				<!--
 				<tr>
 					<td><a href="/index.php?page=pattern">Oasis - Wonderwall</a></td>
 					<td><a href="/index.php?page=pattern">1:15</a></td>
@@ -247,20 +265,12 @@
 						<i class="icon-star-empty"></i>
 					</td>
 					<td>&nbsp;</td>
-				</tr>									
+				</tr>-->									
 			</tbody>
 		</table>
 
 		<div class="pagination">
-			<ul>
-				<li><a href="#">Prev</a></li>
-				<li><a href="#">1</a></li>
-				<li class="active"><a href="#">2</a></li>
-				<li><a href="#">3</a></li>
-				<li><a href="#">4</a></li>
-				<li><a href="#">5</a></li>
-				<li><a href="#">Next</a></li>
-			</ul>
+			{{ $patterns->links() }}
 		</div>						
 		
 	</div>
