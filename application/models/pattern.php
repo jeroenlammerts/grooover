@@ -5,7 +5,7 @@ class Pattern extends Eloquent
 
 	public static $table = 'patterns';
 
-	public function user()
+	/*public function user()
 	{
 		return $this->has_one('User', 'id');
 	}	
@@ -18,5 +18,5 @@ class Pattern extends Eloquent
 	public function genre()
 	{
 		return $this->has_one('Genre', 'id');
-	}
+	}*/
 }

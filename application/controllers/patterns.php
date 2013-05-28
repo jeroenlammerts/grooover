@@ -47,4 +47,32 @@ class Patterns_Controller extends Base_Controller
 			->with('title', $title);
 	}
 
+	public function get_json()
+	{
+		
+		$array = array(
+			'measures' => array(
+				array(
+					'time' => 4,
+					'counts' => array(
+						array(
+							'time' => 4,
+							'instrument' => 0,
+							'notes' => array('x', '', 'x', '')
+						)
+					)
+				)
+			),
+			'instruments' => array(
+				array(
+					'name' => 'Hihat'
+				)
+			),
+			'bpm' => 120
+			
+		);
+
+		return Response::json($array);
+	}
+
 }

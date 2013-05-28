@@ -10,8 +10,8 @@ class User extends Eloquent
 		return $this->first_name . ' ' . $this->last_name;
 	}
 
-	public function patterns(){
+	/*public function patterns(){
 		return $this->has_many('Pattern');
-	}
+	}*/
 
 }

@@ -35,6 +35,7 @@
 Route::get('/', array('as' => 'home', 'uses' => 'home@index'));
 Route::get('patterns', array('as' => 'patterns', 'uses' => 'patterns@index'));
 Route::get('editor', array('as' => 'editor', 'uses' => 'patterns@editor'));
+Route::get('editor/json', array('as' => 'editor', 'uses' => 'patterns@json'));
 Route::get('about', array('as' => 'about', 'uses' => 'home@about'));
 //Route::get('help', array('as' => 'help', 'uses' => 'home@index'));
 Route::get('login', array('as' => 'login', 'uses' => 'user@index'));
