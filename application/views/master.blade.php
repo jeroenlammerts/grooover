@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	{{ HTML::style('css/bootstrap.min.css') }}
-	{{ HTML::style('css/bootstrap-responsive.min.css') }}
+	{{ HTML::style('css/bootstrap-responsive.css') }}
 	{{ HTML::style('css/style.css') }}
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
