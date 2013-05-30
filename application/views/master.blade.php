@@ -7,17 +7,20 @@
 	{{ HTML::style('css/bootstrap.min.css') }}
 	{{ HTML::style('css/bootstrap-responsive.css') }}
 	{{ HTML::style('css/style.css') }}
+
+	{{ HTML::style('css/drummachine.css') }}
+
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
 	  <script src="js/html5shiv.js"></script>
 	<![endif]-->
 </head>
-<body>
+<body id="body">
 	<header>
 		<div class="container">
 			<div class="row">
 				<div class="span12">
-					<h1>Grooover <span>grooves, fills, breaks</span></h1>
+					<a href="{{ URL::to_route('home') }}"><h1>Grooover <span>grooves, fills, breaks</span></h1></a>
 				</div>
 			</div>
 			<div class="row">
@@ -40,9 +43,9 @@
 							<ul class="nav pull-right">
 								<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome, {{ Auth::user()->first_name }} <b class="caret"></b></a>
 									<ul class="dropdown-menu">
-										<li><a href=""><i class="icon-cog"></i> Settings</a></li>
-										<li><a href=""><i class="icon-music"></i> My patterns</a></li>
-										<li><a href=""><i class="icon-star"></i> My favourites</a></li>
+										<li><a href="{{ URL::to_route('profile') }}"><i class="icon-cog"></i> Settings</a></li>
+										<li><a href="{{ URL::to_route('my_patterns') }}"><i class="icon-music"></i> My patterns</a></li>
+										<li><a href="{{ URL::to_route('my_favourites') }}"><i class="icon-star"></i> My favourites</a></li>
 										<li class="divider"></li>
 										<li><a href="{{ URL::to_route('logout') }}"><i class="icon-off"></i> Logout</a></li>
 									</ul>
@@ -98,5 +101,6 @@
 	{{ HTML::script('js/jquery.js') }}
 	{{ HTML::script('js/bootstrap.min.js') }}
 	{{ HTML::script('js/script.js') }}	
+	{{ HTML::script('js/editor.js') }}
 </body>
 </html>

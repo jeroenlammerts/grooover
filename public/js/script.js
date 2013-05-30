@@ -85,10 +85,10 @@ $(document).ready(function(){
 			}
 		});	
 	
-		$('#editor_form').on('submit', function(e) {
+		/*$('#editor_form').on('submit', function(e) {
 			e.preventDefault();
 			console.log( $(this).serialize() );
-		});
+		});*/
 		
 
 		//window.onload = init;

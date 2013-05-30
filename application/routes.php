@@ -34,7 +34,8 @@
 
 Route::get('/', array('as' => 'home', 'uses' => 'home@index'));
 Route::get('patterns', array('as' => 'patterns', 'uses' => 'patterns@index'));
-Route::get('editor', array('as' => 'editor', 'uses' => 'patterns@editor'));
+Route::get('pattern/(:num)', array('as' => 'pattern_detail', 'uses' => 'patterns@pattern'));
+Route::get('editor/(:num?)', array('as' => 'editor', 'uses' => 'patterns@editor'));
 Route::get('editor/json', array('as' => 'editor', 'uses' => 'patterns@json'));
 Route::get('about', array('as' => 'about', 'uses' => 'home@about'));
 //Route::get('help', array('as' => 'help', 'uses' => 'home@index'));
@@ -42,13 +43,19 @@ Route::get('login', array('as' => 'login', 'uses' => 'user@index'));
 Route::get('register', array('as' => 'register', 'uses' => 'user@register'));
 Route::get('register-activate', array('as' => 'register_finished', 'uses' => 'user@register_finished'));
 Route::get('activate/(:num)/(:all)', array('as' => 'activate', 'uses' => 'user@activate'));
-Route::get('profile', array('as' => 'profile', 'uses' => 'user@profile'));
 Route::get('logout', array('as' => 'logout', 'uses' => 'user@logout'));
 Route::get('forgot-password', array('as' => 'forgot_password', 'uses' => 'user@forgot_pass'));
 
+// user account
+Route::get('profile', array('as' => 'profile', 'uses' => 'user@profile'));
+Route::get('my-patterns', array('as' => 'my_patterns', 'uses' => 'patterns@my_patterns'));
+Route::get('my-favourites', array('as' => 'my_favourites', 'uses' => 'patterns@my_patterns'));
+
+// post forms
 Route::post('login', 'user@index');
 Route::post('register', 'user@register');
 Route::post('forgot_password', 'user@forgot_pass');
+Route::post('pattern', 'patterns@pattern');
 
 /*
 |--------------------------------------------------------------------------
