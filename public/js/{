@@ -1,0 +1,37 @@
+{
+	"kitIndex":13,
+	"effectIndex":18,
+	"tempo":120,
+	"swingFactor":0,
+	"effectMix":0.19718309859154926,
+	"kickPitchVal":0.5,
+	"snarePitchVal":0.5,
+	"hihatPitchVal":0.5,
+	"tom1PitchVal":0.5,
+	"tom2PitchVal":0.5,
+	"tom3PitchVal":0.5,
+
+	"rhythm1":[
+		{
+
+		}
+	],
+
+
+
+}
+
+
+
+{
+	"kitIndex":3,
+	"rhythm1":[
+		[
+			["x","","x",""],["x","","x",""],["x","","x",""],["x","","x",""]
+		],
+		[
+			["x","","x",""],["x","","x",""],["x","","x",""],["x","","x",""]
+		]
+	]
+
+}

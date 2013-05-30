@@ -34,7 +34,7 @@
 
 Route::get('/', array('as' => 'home', 'uses' => 'home@index'));
 Route::get('patterns', array('as' => 'patterns', 'uses' => 'patterns@index'));
-Route::get('pattern/(:num)', array('as' => 'pattern_detail', 'uses' => 'patterns@pattern'));
+Route::get('pattern/(:num)', array('as' => 'pattern_detail', 'uses' => 'patterns@editor'));
 Route::get('editor/(:num?)', array('as' => 'editor', 'uses' => 'patterns@editor'));
 Route::get('editor/json', array('as' => 'editor', 'uses' => 'patterns@json'));
 Route::get('about', array('as' => 'about', 'uses' => 'home@about'));
@@ -55,6 +55,7 @@ Route::get('my-favourites', array('as' => 'my_favourites', 'uses' => 'patterns@m
 Route::post('login', 'user@index');
 Route::post('register', 'user@register');
 Route::post('forgot_password', 'user@forgot_pass');
+Route::post('profile', 'user@profile');
 Route::post('pattern', 'patterns@pattern');
 
 /*

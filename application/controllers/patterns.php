@@ -57,6 +57,29 @@ class Patterns_Controller extends Base_Controller
 
 	public function get_editor($pattern_id = 0)
 	{
+		
+		/*$array = array(
+			"kitIndex" => 3,
+			"rhythm1" => array(
+				array(
+					array('x', '', 'x', ''),
+					array('x', '', 'x', ''),
+					array('x', '', 'x', ''),
+					array('x', '', 'x', '')
+				),
+				array(
+					array('x', '', 'x', ''),
+					array('x', '', 'x', ''),
+					array('x', '', 'x', ''),
+					array('x', '', 'x', '')
+				)
+			)
+		);
+
+		return Response::json($array);
+
+		die();*/
+
 		$data = '';
 		if($pattern_id){
 			$pattern = Pattern::find($pattern_id);

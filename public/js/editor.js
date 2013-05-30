@@ -1,8 +1,175 @@
+
+var kitInstruments = [
+    {
+        'name':'Crash',
+        'values' : ['x', 'X', 'S', 'C'],
+        'valueNames' : ['Crash', 'Accented Crash', 'Splash', 'China']
+    },
+    
+    {
+        'name':'Hihat',
+        'values' : ['x', 'X', 'o', 'O'],
+        'valueNames' : ['Normal closed hihat', 'Accented closed hihat', 'Open hihat', 'Accented open hihat']
+    },
+    {
+        'name':'Snare',
+        'values' : ['o', 'O', 'x', 'X', '@', 'g', 'f', 'd', 'b'],
+        'valueNames' : ['Normal note', 'Accented note', 'Cross stick', 'Accented Cross stick', 'Rimshot', 'Ghost note', 'Flam', 'Drag', 'Roll']
+    },
+    {
+        'name':'Tom 1',
+        'values' : ['o', 'O'],
+        'valueNames' : ['Note', 'Accented note']
+    },
+    {
+        'name':'Tom 2',
+        'values' : ['o', 'O'],
+        'valueNames' : ['Note', 'Accented note']
+    },
+    {
+        'name':'Tom 3',
+        'values' : ['o', 'O'],
+        'valueNames' : ['Note', 'Accented note']
+    },
+    {
+        'name':'Bassdrum',
+        'values' : ['o', 'O'],
+        'valueNames' : ['Note', 'Accented note']
+    }
+];
+/*
+var beats = [
+    {
+        'name':'Crash',
+        'values' : ['x', 'X', 'S', 'C']
+    }
+];*/
+
+var measures = 4;
+var count = 4;
+
+$(document).ready(function(){
+    
+    if($('#editor').length){
+    
+        var html;
+        
+        $.each(kitInstruments, function(i, values) {
+            html = '<tr><td>'+kitInstruments[i]['name']+'</td></tr>';
+            
+            var contentValues = '<table class="table table-condensed">';
+            $.each(kitInstruments[i]['values'], function(j, item){
+                contentValues += '<tr><td>' + item + '</td><td class="description">' + kitInstruments[i]['valueNames'][j] + '</tr>';
+            });
+            contentValues += '</table>';
+            
+            $(html).insertBefore('#editor_instruments table tr:last').popover({
+                html : true,
+                trigger : 'hover',
+                placement: 'right',
+                title: 'Legenda',
+                content: contentValues
+            });
+        });
+        
+        html = '';
+
+        for(i=1; i<=measures; i++){
+
+            html += '<table class="table">';
+            html += '   <tr class="first">';
+            html += '       <td>';
+            html += '           ' + i + '.';
+            html += '       </td>';
+            html += '       <td colspan="3">';
+            html += '           <div class="btn-group pull-right">';
+            html += '               <a href="#" class="btn"><i class="icon-edit"></i></a>';
+            html += '               <a href="#" class="btn"><i class="icon-trash"></i></a>';
+            html += '               <a href="#" class="btn"><i class="icon-plus"></i></a>';
+            html += '           </div>';
+            html += '       </td>';                         
+            html += '   </tr>';
+            for(ki=1; ki<=kitInstruments.length; ki++){
+            html += '   <tr>';
+                for(j=1; j<=count; j++){
+                    html += '       <td>';
+                    html += '           <table>';
+                    html += '               <tr>';
+                    for(k=1; k<=4; k++){
+                        html += '                   <td><input type="text" name="note_' + ki + '_' + i + '_' + j + '_' + k + '" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" placeholder="-" /></td>';
+                    }
+                    html += '               </tr>';
+                    html += '           </table>';
+                    html += '       </td>';
+                }
+                html += '   </tr>';
+            }
+            html += '   <tr>';
+            for(j=1; j<=count; j++){
+                html += '       <td>';
+                html += '           <table class="count">';
+                html += '               <tr>';
+                html += '                   <td>' + j + '</td>';
+                html += '                   <td>e</td>';
+                html += '                   <td>+</td>';
+                html += '                   <td>a</td>';
+                html += '               </tr>';
+                html += '           </table>';                                  
+                html += '       </td>'; 
+            }                       
+            html += '   </tr>';
+            html += '</table>';
+
+        }
+
+        $('#editor').html(html);
+
+        $('#editor').bind("contextmenu", function () {
+            return false;
+        });
+        
+        $('#editor input').mousedown(function(){
+            event.preventDefault();
+            switch (event.which) {
+                // left mouse button
+                case 1:
+                    var index = $(this).parents('tr:eq(1)').index() - 1;
+                    if(!$(this).val()){
+                        $(this).val(kitInstruments[index]['values'][0]);
+                    } else {
+                        var newVal = '';
+                        var value = $(this).val();
+                        $.each(kitInstruments[index]['values'], function(i, item){
+                            if(item == value){
+                                if(kitInstruments[index]['values'].length > i){
+                                    newVal = kitInstruments[index]['values'][i+1];
+                                }
+                            }
+                        });
+                        $(this).val(newVal);
+                    }
+                    break;
+                // right mouse button
+                case 3:
+                    $(this).val('');
+                    break;
+            }
+        });
+        
+    }
+    
+});
+
+
+
+
+
 // Events
 // init() once the page has finished loading.
 
 if($('#editor_wrap_container').length){
     window.onload = init;
+    window.ondragstart = function() { return false; } 
 }
 
 var context;
@@ -37,6 +204,8 @@ var beatDemo = [
     {"kitIndex":1,"effectIndex":4,"tempo":120,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.7887323943661972,"snarePitchVal":0.49295774647887325,"hihatPitchVal":0.5,"tom1PitchVal":0.323943661971831,"tom2PitchVal":0.3943661971830986,"tom3PitchVal":0.323943661971831,"rhythm1":[2,0,0,0,0,0,0,2,2,0,0,0,0,0,0,1],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,1,0,2,0,1,0,1,0,1,0,2,0,2,0],"rhythm4":[2,0,2,0,0,0,0,0,2,0,0,0,0,2,0,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,2,0,0,0,2,0,0,0,2,0,0,0,0,0,0]},
     {"kitIndex":0,"effectIndex":1,"tempo":60,"swingFactor":0.5419847328244275,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[2,2,0,1,2,2,0,1,2,2,0,1,2,2,0,1],"rhythm2":[0,0,2,0,0,0,2,0,0,0,2,0,0,0,2,0],"rhythm3":[2,1,1,1,2,1,1,1,2,1,1,1,2,1,1,1],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,1,0,0,1,0,1,0,0,1,0,0,0,1,0],"rhythm6":[1,0,0,1,0,1,0,1,1,0,0,1,1,1,1,0]},
 ];
+
+var playing = false;
 
 function cloneBeat(source) {
     var beat = new Object();
@@ -376,8 +545,10 @@ function showDemoAvailable(demoIndex /* zero-based */) {
 
 // This gets rid of the loading spinner on the play button.
 function showPlayAvailable() {
-    var play = document.getElementById("play");
-    play.src = "/img/editor/btn_play.png";
+
+    /*var play = document.getElementById("play");
+    play.src = "/img/editor/btn_play.png";*/
+
 }
 
 function init() {
@@ -477,8 +648,16 @@ function initControls() {
     document.getElementById('swing_thumb').addEventListener('dblclick', handleSliderDoubleClick, true);
 
     // tool buttons
-    document.getElementById('play').addEventListener('mousedown', handlePlay, true);
-    document.getElementById('stop').addEventListener('mousedown', handleStop, true);
+    /*document.getElementById('play').addEventListener('mousedown', handlePlay, true);
+    document.getElementById('stop').addEventListener('mousedown', handleStop, true);*/
+
+    $('#btn_play').click(function(e){
+        if($(this).find('i').hasClass('icon-play')){
+            handlePlay(e);
+        } else {
+            handleStop(e);
+        }        
+    });
 
     $('#save_btn').click(function(e){
         e.preventDefault();
@@ -619,7 +798,7 @@ function schedule() {
         // Hihat
         if (theBeat.rhythm3[rhythmIndex]) {
             // Pan the hihat according to sequence position.
-            playNote(currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, 1, volumes[theBeat.rhythm3[rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
+            playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[theBeat.rhythm3[rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
         }
 
         // Toms    
@@ -815,7 +994,7 @@ function handleButtonMouseDown(event) {
 
     var note = notes[rhythmIndex];
     
-    if (note) {
+    if (note && !playing) {
         switch(instrumentIndex) {
         case 0:  // Kick
           playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5 * theBeat.effectMix, volumes[note] * 1.0, kickPitch, 0);
@@ -827,7 +1006,7 @@ function handleButtonMouseDown(event) {
 
         case 2:  // Hihat
           // Pan the hihat according to sequence position.
-          playNote(currentKit.hihatBuffer, true, 0.5*rhythmIndex - 4, 0, -1.0, theBeat.effectMix, volumes[note] * 0.7, hihatPitch, 0);
+          playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, theBeat.effectMix, volumes[note] * 0.7, hihatPitch, 0);
           break;
 
         case 3:  // Tom 1   
@@ -963,15 +1142,26 @@ function handleDemoMouseDown(event) {
 }
 
 function handlePlay(event) {
+
+    $('#btn_play i').removeClass('icon-play');
+    $('#btn_play i').addClass('icon-stop');
+    
+    playing = true;
     noteTime = 0.0;
     startTime = context.currentTime + 0.005;
     schedule();
 
-    document.getElementById('play').classList.add('playing');
-    document.getElementById('stop').classList.add('playing');
+    /*document.getElementById('play').classList.add('playing');
+    document.getElementById('stop').classList.add('playing');*/
+
 }
 
 function handleStop(event) {
+
+    $('#btn_play i').removeClass('icon-stop');
+    $('#btn_play i').addClass('icon-play');
+
+    playing = false;
     clearTimeout(timeoutId);
 
     var elOld = document.getElementById('LED_' + (rhythmIndex + 14) % 16);
@@ -979,8 +1169,8 @@ function handleStop(event) {
 
     rhythmIndex = 0;
 
-    document.getElementById('play').classList.remove('playing');
-    document.getElementById('stop').classList.remove('playing');
+    /*document.getElementById('play').classList.remove('playing');
+    document.getElementById('stop').classList.remove('playing');*/
 }
 
 function handleSave(event) {

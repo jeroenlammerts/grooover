@@ -29,7 +29,7 @@
 					{{ Form::label('password', 'Password', array('class' => 'input-xlarge')) }}
 					<div class="controls">
 						{{ Form::password('password', array('class' => 'input-xlarge')) }}
-						<p class="help-block">Password should be at least 4 characters</p>
+						<p class="help-block">Password should be at least 6 characters</p>
 					</div>
 				</div>
 

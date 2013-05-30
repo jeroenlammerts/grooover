@@ -119,8 +119,8 @@ class User_Controller extends Base_Controller
 			'first_name' => 'required',
 			'last_name' => 'required',
 			'email' => 'required|unique:users|email',
-			'password' => 'required',
-			'password_confirm' => 'required|same:password'
+			'password' => 'required|min:6',
+			'password_confirm' => 'required|same:password|min:6'
 		);
 
 		$v = Validator::make($input, $rules);
@@ -196,9 +196,45 @@ class User_Controller extends Base_Controller
 
 	public function get_profile()
 	{
-		$title = Auth::user()->email . "'s Page";
+
+		$user = Auth::user();
+
+		$title = "Profile";
 		return View::make('user.profile')
-			->with('title', $title);
+			->with('title', $title)
+			->with('user', $user);
+	}
+
+	public function post_profile()
+	{
+		$input = Input::all();
+
+		$rules = array(
+			'first_name' => 'required',
+			'last_name' => 'required',
+			'email' => 'required|email',
+			'password' => 'min:6'
+		);
+
+		$v = Validator::make($input, $rules);
+
+		if($v->fails()){
+			return Redirect::to_route('profile')->with_errors($v)->with_input();
+		} else {
+
+			$user = Auth::user();
+			$user->first_name = $input['first_name'];
+			$user->last_name = $input['last_name'];
+			$user->email = $input['email'];
+			if(trim($input['password']) != ''){
+				$password = $input['password'];
+				$password_hased = Hash::make($password);
+				$user->password = $password_hased;
+			}			
+			$user->save();	
+
+			return Redirect::to_route('profile')->with('status', 'Profile saved')->with_input();
+		}
 	}
 
 	public function get_logout()

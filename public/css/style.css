@@ -11,16 +11,23 @@ header .breadcrumb { background: none; padding: 8px 0; }
 section.content {  }
 
 /* Editor */
+
+/*#editor_wrap_container { display: none; }*/
+
 #editor_info label { width: 60px; }
 #editor_info select { width: 162px; }
 #editor_info .row { margin-bottom: 10px; }
 
 #editor_wrap { margin-top: 20px; }
-#editor_container { overflow: auto; }
-#editor { width: 2000px; /*height: 250px; /*background: #ececec;*/ }
-#editor > table { width: auto; float: left; margin-right: 15px; }
-#editor_wrap .table tr > td { height: 20px; }
+#editor_container { overflow: auto; height: 300px; }
+#editor { width: 5000px; /*height: 250px; /*background: #ececec;*/ }
+#editor > table { width: auto; float: left; margin-right: 15px; margin-bottom: 0; }
+#editor_wrap .table > tbody > tr > td { height: 21px; padding: 2px 4px 2px 4px; }
+#editor_wrap .table > tr > td tr td { padding: 0; }
+#editor_instruments .table tr > td { height: 21px; padding: 4px; }
 #editor_wrap table tr.first td { border: 0; height: 33px; vertical-align: bottom; }
+#editor_instruments table tr.first td { height: 33px; }
+#editor_instruments td:hover { cursor: pointer; text-decoration: underline; }
 #editor table .btn-group { display: none; }
 #editor table:hover .btn-group { display: block; }
 #editor table.count { margin-left: 6px; }

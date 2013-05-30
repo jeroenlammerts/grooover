@@ -173,61 +173,62 @@
 
 
 
-				<!--<form class="form-inline" id="editor_form">	
-				<div id="editor_info">
-					<legend>Settings</legend>
-					<div class="row">
-						<div class="span3">
-							<label for="type">Type</label>
-							<select class="input-medium" name="type" id="type">
-								<option value="1">Groove</option>
-								<option value="2">Fill</option>
-								<option value="3">Break</option>
-							</select>
-						</div>
-						<div class="span3">
-							<label for="genre">Genre</label>
-							<select class="input-medium" name="genre" id="genre">
-								<option value="1">Pop</option>
-								<option value="2">Rock</option>
-								<option value="3">Metal</option>
-							</select>
-						</div>
-						<div class="span3">						
-							<label for="artist">Artist</label>
-							<select class="input-medium" name="artist" id="artist">
-								<option value="1">Eigen</option>
-								<option value="2">Black Keys</option>
-								<option value="3">Foo Fighters</option>
-							</select>
-						</div>
-						<div class="span3">						
-							<label for="song">Song</label>
-							<select class="input-medium" name="song" id="song">
-								<option value="1">Eigen</option>
-								<option value="2">Gold On The Ceiling</option>
-								<option value="3">All My Life</option>
-							</select>
-						</div>					
+				<div class="row" id="editor_wrap">
+
+					<div class="span2" id="editor_instruments">
+						<table class="table">
+							<tr class="first">
+								<td>&nbsp;</td>
+							</tr>
+							<tr>
+								<td>
+								</td>
+							</tr>
+						</table>
 					</div>
 
-					<div class="row">
-						<div class="span3">
-							<label for="time">Time</label>
-							<input type="text" class="input-medium" name="time" id="time" placeholder="1:23" />
-						</div>	
-						<div class="span3">
-							<label for="youtube">Youtube</label>
-							<input type="text" class="input-medium" name="youtube" id="youtube" placeholder="http://www.youtube.com/watch?v=Phfc0rPB_7k" />
-						</div>
+					<div class="span10" id="editor_container">
+						<div id="editor">Loading...</div>
 					</div>
+
 				</div>
 
+				<div class="row" id="editor_contols">
+					<div class="span10 offset2">
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<!--<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-backward"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>-->
+								<a href="javascript: void(0);" class="btn btn-inverse" id="btn_play"><i class="icon-white icon-play"></i></a>
+								<!--<a href="#" class="btn btn-inverse"><i class="icon-white icon-pause"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-forward"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-forward"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-repeat"></i></a>-->
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
+									Rock kit
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu">
+									<li><a href="#">Pop kit</a></li>
+									<li><a href="#">Jazz kit</a></li>
+									<li><a href="#">Fusion kit</a></li>							
+									<li><a href="#">Electro kit</a></li>							
+								</ul>
+							</div>
+							<div class="btn-group">
+								<a href="#" class="btn btn-inverse">120 BPM</a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-minus"></i></a>
+								<a href="#" class="btn btn-inverse">Swing</a>
+							</div>
+						</div>					
 
-						<button class="btn btn-large pull-right" type="submit" id="save_editor">Opslaan</button>
+						<button class="btn btn-large pull-right" type="submit" id="save_editor">Opslaan</button>						
 
-				
+					</div>
 
-				</form>-->
+				</div>
 
 @endsection
