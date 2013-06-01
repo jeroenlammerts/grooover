@@ -519,7 +519,7 @@ function showDemoAvailable(demoIndex /* zero-based */) {
         var elTextarea = document.getElementById('save_textarea');
         theBeat = JSON.parse(elTextarea.value);
 
-        console.log(theBeat);
+        //console.log(theBeat);
 
         // Set drumkit
         currentKit = kits[theBeat.kitIndex];
@@ -732,8 +732,23 @@ function initButtons() {
                 html += '       </td>';
             }
             html += '   </tr>';
-        }
+        }      
+
         html += '   <tr>';
+        for(j=1; j<=count; j++){
+            html += '       <td>';
+            html += '           <table>';
+            html += '               <tr>';
+            for(k=0; k<4; k++){
+                html += '                   <td><img id="LED_' + i + '_' + j + '_' + k + '" src="/img/editor/LED_off.png"></td>';
+            }
+            html += '               </tr>';
+            html += '           </table>';                                  
+            html += '       </td>'; 
+        }                       
+        html += '   </tr>';
+
+        /*html += '   <tr>';
         for(j=1; j<=count; j++){
             html += '       <td>';
             html += '           <table class="count">';
@@ -746,7 +761,8 @@ function initButtons() {
             html += '           </table>';                                  
             html += '       </td>'; 
         }                       
-        html += '   </tr>';
+        html += '   </tr>'; */
+
         html += '</table>';
 
     }
@@ -1370,10 +1386,6 @@ function loadBeat(beat) {
 }
 
 function updateControls() {
-
-    console.log('test');
-    console.log(theBeat);
-    console.log(theBeat.rhythms.length);
 
     for(i=0; i<theBeat.rhythms.length; i++){
 
