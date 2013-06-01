@@ -1,22 +1,6 @@
 
 var kitInstruments = [
     {
-        'name':'Crash',
-        'values' : ['x', 'X', 'S', 'C'],
-        'valueNames' : ['Crash', 'Accented Crash', 'Splash', 'China']
-    },
-    
-    {
-        'name':'Hihat',
-        'values' : ['x', 'X', 'o', 'O'],
-        'valueNames' : ['Normal closed hihat', 'Accented closed hihat', 'Open hihat', 'Accented open hihat']
-    },
-    {
-        'name':'Snare',
-        'values' : ['o', 'O', 'x', 'X', '@', 'g', 'f', 'd', 'b'],
-        'valueNames' : ['Normal note', 'Accented note', 'Cross stick', 'Accented Cross stick', 'Rimshot', 'Ghost note', 'Flam', 'Drag', 'Roll']
-    },
-    {
         'name':'Tom 1',
         'values' : ['o', 'O'],
         'valueNames' : ['Note', 'Accented note']
@@ -31,6 +15,22 @@ var kitInstruments = [
         'values' : ['o', 'O'],
         'valueNames' : ['Note', 'Accented note']
     },
+    /*{
+        'name':'Crash',
+        'values' : ['x', 'X', 'S', 'C'],
+        'valueNames' : ['Crash', 'Accented Crash', 'Splash', 'China']
+    },*/
+    {
+        'name':'Hihat',
+        'values' : ['x', 'X', 'o', 'O'],
+        'valueNames' : ['Normal closed hihat', 'Accented closed hihat', 'Open hihat', 'Accented open hihat']
+    },
+    {
+        'name':'Snare',
+        'values' : ['o', 'O', 'x', 'X', '@', 'g', 'f', 'd', 'b'],
+        'valueNames' : ['Normal note', 'Accented note', 'Cross stick', 'Accented Cross stick', 'Rimshot', 'Ghost note', 'Flam', 'Drag', 'Roll']
+    },
+
     {
         'name':'Bassdrum',
         'values' : ['o', 'O'],
@@ -45,7 +45,7 @@ var beats = [
     }
 ];*/
 
-var measures = 4;
+var measures = 10;
 var count = 4;
 
 $(document).ready(function(){
@@ -72,7 +72,7 @@ $(document).ready(function(){
             });
         });
         
-        html = '';
+        /*html = '';
 
         for(i=1; i<=measures; i++){
 
@@ -96,7 +96,8 @@ $(document).ready(function(){
                     html += '           <table>';
                     html += '               <tr>';
                     for(k=1; k<=4; k++){
-                        html += '                   <td><input type="text" name="note_' + ki + '_' + i + '_' + j + '_' + k + '" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" placeholder="-" /></td>';
+                        //html += '                   <td><input type="text" name="note_' + ki + '_' + i + '_' + j + '_' + k + '" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" placeholder="-" /></td>';
+                        html += '                   <td><img src="/img/editor/button_off.png" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" /></td>';
                     }
                     html += '               </tr>';
                     html += '           </table>';
@@ -122,13 +123,13 @@ $(document).ready(function(){
 
         }
 
-        $('#editor').html(html);
+        $('#editor').html(html);*/
 
         $('#editor').bind("contextmenu", function () {
             return false;
         });
         
-        $('#editor input').mousedown(function(){
+        /*$('#editor img').mousedown(function(){
             event.preventDefault();
             switch (event.which) {
                 // left mouse button
@@ -154,7 +155,7 @@ $(document).ready(function(){
                     $(this).val('');
                     break;
             }
-        });
+        });*/
         
     }
     
@@ -208,6 +209,7 @@ var beatDemo = [
 var playing = false;
 
 function cloneBeat(source) {
+
     var beat = new Object();
     
     beat.kitIndex = source.kitIndex;
@@ -227,6 +229,10 @@ function cloneBeat(source) {
     beat.rhythm4 = source.rhythm4.slice(0);
     beat.rhythm5 = source.rhythm5.slice(0);
     beat.rhythm6 = source.rhythm6.slice(0);
+
+    if(source.rhythms){
+        beat.rhythms = source.rhythms;
+    }
     
     return beat;
 }
@@ -513,6 +519,8 @@ function showDemoAvailable(demoIndex /* zero-based */) {
         var elTextarea = document.getElementById('save_textarea');
         theBeat = JSON.parse(elTextarea.value);
 
+        console.log(theBeat);
+
         // Set drumkit
         currentKit = kits[theBeat.kitIndex];
         document.getElementById('kitname').innerHTML = kitNamePretty[theBeat.kitIndex];
@@ -619,7 +627,7 @@ function init() {
     document.body.addEventListener("mousedown", handleBodyMouseDown, true);
 
     initControls();
-    updateControls();
+    //updateControls();
 }
 
 function initControls() {
@@ -688,12 +696,72 @@ function initControls() {
 function initButtons() {        
     var elButton;
 
-    for (i = 0; i < loopLength; ++i) {
+    html = '';
+
+    for(i=0; i<measures; i++){
+
+        html += '<table class="table">';
+        html += '   <tr class="first">';
+        html += '       <td>';
+        html += '           ' + (i+1) + '.';
+        html += '       </td>';
+        html += '       <td colspan="3">';
+        html += '           <div class="btn-group pull-right">';
+        html += '               <a href="#" class="btn"><i class="icon-edit"></i></a>';
+        html += '               <a href="#" class="btn"><i class="icon-trash"></i></a>';
+        html += '               <a href="#" class="btn"><i class="icon-plus"></i></a>';
+        html += '           </div>';
+        html += '       </td>';                         
+        html += '   </tr>';
+        for(ki=0; ki<kitInstruments.length; ki++){
+        /*html += '   <tr>';*/
+            for(j=0; j<count; j++){
+                html += '       <td>';
+                html += '           <table>';
+                html += '               <tr>';
+                for(k=0; k<4; k++){
+                    //html += '                   <td><input type="text" name="note_' + ki + '_' + i + '_' + j + '_' + k + '" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" placeholder="-" /></td>';
+                    html += '                   <td><img src="/img/editor/button_off.png" id="note_' + i + '_' + ki + '_' + j + '_' + k + '" class="note" /></td>';
+
+                    //elButton = document.getElementById('note_' + ki + '_' + i + '_' + j + '_' + k);
+                    //elButton.addEventListener("mousedown", handleButtonMouseDown, true);
+
+                }
+                html += '               </tr>';
+                html += '           </table>';
+                html += '       </td>';
+            }
+            html += '   </tr>';
+        }
+        html += '   <tr>';
+        for(j=1; j<=count; j++){
+            html += '       <td>';
+            html += '           <table class="count">';
+            html += '               <tr>';
+            html += '                   <td>' + j + '</td>';
+            html += '                   <td>e</td>';
+            html += '                   <td>+</td>';
+            html += '                   <td>a</td>';
+            html += '               </tr>';
+            html += '           </table>';                                  
+            html += '       </td>'; 
+        }                       
+        html += '   </tr>';
+        html += '</table>';
+
+    }
+
+    $('#editor').html(html);
+    $('#editor img.note').click(function(e){
+        handleButtonMouseDown(e);
+    });
+
+    /*for (i = 0; i < loopLength; ++i) {
         for (j = 0; j < kNumInstruments; j++) {
                 elButton = document.getElementById(instruments[j] + '_' + i);
                 elButton.addEventListener("mousedown", handleButtonMouseDown, true);
         }
-    }
+    }*/
 }
 
 function makeEffectList() {
@@ -973,10 +1041,17 @@ function handleButtonMouseDown(event) {
     var notes = theBeat.rhythm1;
     
     var instrumentIndex;
-    var rhythmIndex;
+    var rhythmIndex = 2;
 
     var elId = event.target.id;
-    rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
+
+    var noteInfo = elId.split('_');
+    var measureIndex = noteInfo[1];
+    var instrumentIndex = noteInfo[2];
+    var countIndex = noteInfo[3];
+    var noteIndex = noteInfo[4];
+
+    /*rhythmIndex = elId.substr(elId.indexOf('_') + 1, 2);
     instrumentIndex = instruments.indexOf(elId.substr(0, elId.indexOf('_')));
         
     switch (instrumentIndex) {
@@ -988,11 +1063,34 @@ function handleButtonMouseDown(event) {
         case 5: notes = theBeat.rhythm6; break;
     }
 
-    notes[rhythmIndex] = (notes[rhythmIndex] + 1) % 3;
+    notes[rhythmIndex] = (notes[rhythmIndex] + 1) % 3;*/
 
-    drawNote(notes[rhythmIndex], rhythmIndex, instrumentIndex);
 
-    var note = notes[rhythmIndex];
+    if(!$.isArray(theBeat.rhythms)){
+        theBeat.rhythms = new Array();
+    }    
+    if(!$.isArray(theBeat.rhythms[measureIndex])){
+        theBeat.rhythms[measureIndex] = new Array();
+    }    
+    if(!$.isArray(theBeat.rhythms[measureIndex][instrumentIndex])){
+        theBeat.rhythms[measureIndex][instrumentIndex] = new Array();
+    }    
+    if(!$.isArray(theBeat.rhythms[measureIndex][instrumentIndex][countIndex])){
+        theBeat.rhythms[measureIndex][instrumentIndex][countIndex] = new Array();
+    }
+
+    var noteKey = 2;
+    if(theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] == 2){
+        noteKey = 0
+    }
+    theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] = noteKey;
+
+/*
+    drawNote(notes[rhythmIndex], rhythmIndex, instrumentIndex);*/
+
+    drawNote(noteKey, measureIndex, instrumentIndex, countIndex, noteIndex);
+
+    /*var note = notes[rhythmIndex];
     
     if (note && !playing) {
         switch(instrumentIndex) {
@@ -1021,7 +1119,7 @@ function handleButtonMouseDown(event) {
           playNote(currentKit.tom3, false, 0,0,-2, theBeat.effectMix, volumes[note] * 0.6, tom3Pitch, 0);
           break;
         }
-    }
+    }*/
 }
 
 function handleKitComboMouseDown(event) {
@@ -1272,7 +1370,33 @@ function loadBeat(beat) {
 }
 
 function updateControls() {
-    for (i = 0; i < loopLength; ++i) {
+
+    console.log('test');
+    console.log(theBeat);
+    console.log(theBeat.rhythms.length);
+
+    for(i=0; i<theBeat.rhythms.length; i++){
+
+        if(theBeat.rhythms[i]){
+            for(j=0; j<theBeat.rhythms[i].length; j++){
+                if(theBeat.rhythms[i][j]){
+                    for(k=0; k<theBeat.rhythms[i][j].length; k++){
+                        if(theBeat.rhythms[i][j][k]){
+                            for(l=0; l<theBeat.rhythms[i][j][k].length; l++){
+                                if(theBeat.rhythms[i][j][k][l] > 0){
+                                    drawNote(2, i, j, k, l);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
+
+    /*for (i = 0; i < loopLength; ++i) {
         for (j = 0; j < kNumInstruments; j++) {
             switch (j) {
                 case 0: notes = theBeat.rhythm1; break;
@@ -1285,7 +1409,7 @@ function updateControls() {
 
             drawNote(notes[i], i, j);
         }
-    }
+    }*/
 
     document.getElementById('kitname').innerHTML = kitNamePretty[theBeat.kitIndex];
     document.getElementById('effectname').innerHTML = impulseResponseInfoList[theBeat.effectIndex].name;
@@ -1300,7 +1424,18 @@ function updateControls() {
     sliderSetPosition('tom3_thumb', theBeat.tom3PitchVal);
 }
 
+function drawNote(draw, measureIndex, instrumentIndex, countIndex, noteIndex) {
 
+    var elButton = document.getElementById('note_' + measureIndex + '_' + instrumentIndex + '_' + countIndex + '_' + noteIndex);
+    //console.log('note_' + measureIndex + '_' + instrumentIndex + '_' + countIndex + '_' + noteIndex);
+    switch (draw) {
+        case 0: elButton.src = '/img/editor/button_off.png'; break;
+        case 1: elButton.src = '/img/editor/button_half.png'; break;
+        case 2: elButton.src = '/img/editor/button_on.png'; break;
+    }
+}
+
+/*
 function drawNote(draw, xindex, yindex) {    
     var elButton = document.getElementById(instruments[yindex] + '_' + xindex);
     switch (draw) {
@@ -1308,7 +1443,7 @@ function drawNote(draw, xindex, yindex) {
         case 1: elButton.src = '/img/editor/button_half.png'; break;
         case 2: elButton.src = '/img/editor/button_on.png'; break;
     }
-}
+}*/
 
 function drawPlayhead(xindex) {
     var lastIndex = (xindex + 15) % 16;

@@ -60,20 +60,25 @@ class Patterns_Controller extends Base_Controller
 		
 		/*$array = array(
 			"kitIndex" => 3,
-			"rhythm1" => array(
+			"rhythms" => array(
 				array(
-					array('x', '', 'x', ''),
-					array('x', '', 'x', ''),
-					array('x', '', 'x', ''),
-					array('x', '', 'x', '')
-				),
-				array(
-					array('x', '', 'x', ''),
-					array('x', '', 'x', ''),
-					array('x', '', 'x', ''),
-					array('x', '', 'x', '')
+					"rhythm1" => array(
+						array(
+							array('x', '', 'x', ''),
+							array('x', '', 'x', ''),
+							array('x', '', 'x', ''),
+							array('x', '', 'x', '')
+						),
+						array(
+							array('x', '', 'x', ''),
+							array('x', '', 'x', ''),
+							array('x', '', 'x', ''),
+							array('x', '', 'x', '')
+						)
+					)
 				)
 			)
+
 		);
 
 		return Response::json($array);
