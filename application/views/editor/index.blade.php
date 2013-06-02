@@ -178,15 +178,17 @@
 							</div>
 							<div class="btn-group">
 								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
-									Rock kit
+									<span id="active_kit"></span>
 									<span class="caret"></span>
 								</a>
-								<ul class="dropdown-menu">
-									<li><a href="#">Pop kit</a></li>
-									<li><a href="#">Jazz kit</a></li>
-									<li><a href="#">Fusion kit</a></li>							
-									<li><a href="#">Electro kit</a></li>							
-								</ul>
+								<ul class="dropdown-menu" id="kits_list"></ul>
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
+									<span id="active_effect"></span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" id="effects_list"></ul>
 							</div>
 							<div class="btn-group">
 								<a href="#" class="btn btn-inverse">120 BPM</a>

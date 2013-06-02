@@ -622,11 +622,11 @@ function init() {
     convolver.connect(effectLevelNode);
 
 
-    var elKitCombo = document.getElementById('kitcombo');
-    elKitCombo.addEventListener("mousedown", handleKitComboMouseDown, true);
+    //var elKitCombo = document.getElementById('kitcombo');
+    //elKitCombo.addEventListener("mousedown", handleKitComboMouseDown, true);
 
-    var elEffectCombo = document.getElementById('effectcombo');
-    elEffectCombo.addEventListener("mousedown", handleEffectComboMouseDown, true);
+    /*var elEffectCombo = document.getElementById('effectcombo');
+    elEffectCombo.addEventListener("mousedown", handleEffectComboMouseDown, true);*/
 
     document.body.addEventListener("mousedown", handleBodyMouseDown, true);
 
@@ -789,7 +789,25 @@ function initButtons() {
 }
 
 function makeEffectList() {
-    var elList = document.getElementById('effectlist');
+    
+    var numEffects = impulseResponseInfoList.length;
+
+    html = '';
+    for (var i = 0; i < numEffects; i++) {
+        html += '<li id="effect_' + i + '"'; 
+        if(i == theBeat.kitIndex){
+            html += 'class="disabled"';
+        }
+        html += '><a href="javascript: void(0);">' + impulseResponseInfoList[i].name + '</a></li>';
+    }
+
+    $('#effects_list').html(html);
+    $('#effects_list a').click(function(e){
+        handleEffectMouseDown($(this));
+    });
+    //$('#active_effect').html(impulseResponseInfoList[i].name);    
+
+    /*var elList = document.getElementById('effectlist');
     var numEffects = impulseResponseInfoList.length;
 
     
@@ -802,19 +820,28 @@ function makeEffectList() {
         elItem.innerHTML = impulseResponseInfoList[i].name;
         elList.appendChild(elItem);
         elItem.addEventListener("mousedown", handleEffectMouseDown, true);
-    }
+    }*/
 }
 
 function makeKitList() {
     var elList = document.getElementById('kitlist');
     var numKits = kitName.length;
-    
+
+    html = '';
     for (var i = 0; i < numKits; i++) {
-        var elItem = document.createElement('li');
-        elItem.innerHTML = kitNamePretty[i];
-        elList.appendChild(elItem);
-        elItem.addEventListener("mousedown", handleKitMouseDown, true);
+        html += '<li id="kit_' + i + '"'; 
+        if(i == theBeat.kitIndex){
+            html += 'class="disabled"';
+        }
+        html += '><a href="javascript: void(0);">' + kitNamePretty[i] + '</a></li>';
     }
+
+    $('#kits_list').html(html);
+    $('#kits_list a').click(function(e){
+        handleKitMouseDown($(this));
+    });
+    $('#active_kit').html(kitNamePretty[theBeat.kitIndex]);
+
 }
 
 function advanceNote() {
@@ -1169,11 +1196,21 @@ function handleKitComboMouseDown(event) {
     document.getElementById('kitcombo').classList.toggle('active');
 }
 
-function handleKitMouseDown(event) {
+function handleKitMouseDown(button) {
+
+    var index = kitNamePretty.indexOf(button.html());
+    theBeat.kitIndex = index;
+    currentKit = kits[index];
+    $('#active_kit').html(kitNamePretty[index]);
+    $('#kits_list .disabled').removeClass('disabled');
+    $('#kit_' + index).addClass('disabled');
+
+
+    /*
     var index = kitNamePretty.indexOf(event.target.innerHTML);
     theBeat.kitIndex = index;
     currentKit = kits[index];
-    document.getElementById('kitname').innerHTML = kitNamePretty[index];
+    document.getElementById('kitname').innerHTML = kitNamePretty[index];*/
 }
 
 function handleBodyMouseDown(event) {
@@ -1213,9 +1250,12 @@ function handleEffectComboMouseDown(event) {
     }
 }
 
-function handleEffectMouseDown(event) {
+function handleEffectMouseDown(button) {
+
+    console.log('test');
+
     for (var i = 0; i < impulseResponseInfoList.length; ++i) {
-        if (impulseResponseInfoList[i].name == event.target.innerHTML) {
+        if (impulseResponseInfoList[i].name == button.html()) {
 
             // Hack - if effect is turned all the way down - turn up effect slider.
             // ... since they just explicitly chose an effect from the list.
@@ -1226,6 +1266,20 @@ function handleEffectMouseDown(event) {
             break;
         }
     }
+
+    /*for (var i = 0; i < impulseResponseInfoList.length; ++i) {
+        if (impulseResponseInfoList[i].name == event.target.innerHTML) {
+
+            // Hack - if effect is turned all the way down - turn up effect slider.
+            // ... since they just explicitly chose an effect from the list.
+            if (theBeat.effectMix == 0)
+                theBeat.effectMix = 0.5;
+
+            setEffect(i);
+            break;
+        }
+    }*/
+
 }
 
 function setEffect(index) {
@@ -1248,7 +1302,11 @@ function setEffect(index) {
     sliderSetValue('effect_thumb', theBeat.effectMix);
     updateControls();
 
-    document.getElementById('effectname').innerHTML = impulseResponseInfoList[index].name;
+    $('#active_effect').html(impulseResponseInfoList[index].name);
+    $('#effects_list .disabled').removeClass('disabled');
+    $('#effect_' + index).addClass('disabled');
+
+    //document.getElementById('effectname').innerHTML = impulseResponseInfoList[index].name;
 }
 
 function setEffectLevel() {        
