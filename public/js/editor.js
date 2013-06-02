@@ -45,8 +45,10 @@ var beats = [
     }
 ];*/
 
-var measures = 10;
-var count = 4;
+var measures = 2;
+var counts = 4;
+var countTime = 4;
+var totalNotes = measures*counts*countTime;
 
 $(document).ready(function(){
     
@@ -246,7 +248,9 @@ kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = 0;
 var mouseCapture = null;
 var mouseCaptureOffset = 0;
 
-var loopLength = 16;
+//var loopLength = 16;
+var loopLength = measures * counts;
+
 var rhythmIndex = 0;
 var kMinTempo = 50;
 var kMaxTempo = 180;
@@ -698,6 +702,8 @@ function initButtons() {
 
     html = '';
 
+    var led = 0;
+
     for(i=0; i<measures; i++){
 
         html += '<table class="table">';
@@ -715,7 +721,7 @@ function initButtons() {
         html += '   </tr>';
         for(ki=0; ki<kitInstruments.length; ki++){
         /*html += '   <tr>';*/
-            for(j=0; j<count; j++){
+            for(j=0; j<counts; j++){
                 html += '       <td>';
                 html += '           <table>';
                 html += '               <tr>';
@@ -735,12 +741,14 @@ function initButtons() {
         }      
 
         html += '   <tr>';
-        for(j=1; j<=count; j++){
+        for(j=0; j<counts; j++){
             html += '       <td>';
             html += '           <table>';
             html += '               <tr>';
             for(k=0; k<4; k++){
-                html += '                   <td><img id="LED_' + i + '_' + j + '_' + k + '" src="/img/editor/LED_off.png"></td>';
+                //html += '                   <td><img id="LED_' + i + '_' + j + '_' + k + '" src="/img/editor/LED_off.png"></td>';
+                html += '                   <td><img id="led_' + led + '" src="/img/editor/LED_off.png"></td>';
+                led++;
             }
             html += '               </tr>';
             html += '           </table>';                                  
@@ -813,8 +821,24 @@ function advanceNote() {
     // Advance time by a 16th note...
     var secondsPerBeat = 60.0 / theBeat.tempo;
 
+    playingNote++;
+
+    if(playingNote == countTime){
+        playingNote = 0;
+        playingCount++;
+    }
+    if(playingCount == counts){
+        playingCount = 0;
+        playingMeasure++;
+    }
+    if(playingMeasure == measures){
+        playingMeasure = 0;
+    }
+
+    //console.log(playingNote + ' ' + playingCount + ' ' + playingMeasure);
+
     rhythmIndex++;
-    if (rhythmIndex == loopLength) {
+    if (rhythmIndex == totalNotes) {
         rhythmIndex = 0;
     }
 
@@ -869,40 +893,43 @@ function schedule() {
         // Convert noteTime to context time.
         var contextPlayTime = noteTime + startTime;
         
-        // Kick
-        if (theBeat.rhythm1[rhythmIndex]) {
-            playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[theBeat.rhythm1[rhythmIndex]] * 1.0, kickPitch, contextPlayTime);
-        }
+        if($.isArray(theBeat.rhythms[playingMeasure])){
 
-        // Snare
-        if (theBeat.rhythm2[rhythmIndex]) {
-            playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[theBeat.rhythm2[rhythmIndex]] * 0.6, snarePitch, contextPlayTime);
-        }
+            // kick
+            if ($.isArray(theBeat.rhythms[playingMeasure][5]) && $.isArray(theBeat.rhythms[playingMeasure][5][playingCount]) && theBeat.rhythms[playingMeasure][5][playingCount][playingNote]) {
+                playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[2] * 1.0, kickPitch, contextPlayTime);
+            }
 
-        // Hihat
-        if (theBeat.rhythm3[rhythmIndex]) {
-            // Pan the hihat according to sequence position.
-            playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[theBeat.rhythm3[rhythmIndex]] * 0.7, hihatPitch, contextPlayTime);
-        }
+            // Snare
+            if ($.isArray(theBeat.rhythms[playingMeasure][4]) && $.isArray(theBeat.rhythms[playingMeasure][4][playingCount]) && theBeat.rhythms[playingMeasure][4][playingCount][playingNote]) {
+                playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[2] * 0.6, snarePitch, contextPlayTime);
+            }
 
-        // Toms    
-        if (theBeat.rhythm4[rhythmIndex]) {
-            playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[theBeat.rhythm4[rhythmIndex]] * 0.6, tom1Pitch, contextPlayTime);
-        }
+            // Hihat
+            if ($.isArray(theBeat.rhythms[playingMeasure][3]) && $.isArray(theBeat.rhythms[playingMeasure][3][playingCount]) && theBeat.rhythms[playingMeasure][3][playingCount][playingNote]) {
+                // Pan the hihat according to sequence position.
+                playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[2] * 0.7, hihatPitch, contextPlayTime);
+            }
 
-        if (theBeat.rhythm5[rhythmIndex]) {
-            playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[theBeat.rhythm5[rhythmIndex]] * 0.6, tom2Pitch, contextPlayTime);
-        }
+            // Toms    
+            if ($.isArray(theBeat.rhythms[playingMeasure][2]) && $.isArray(theBeat.rhythms[playingMeasure][2][playingCount]) && theBeat.rhythms[playingMeasure][2][playingCount][playingNote]) {
+                playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[2] * 0.6, tom1Pitch, contextPlayTime);
+            }
 
-        if (theBeat.rhythm6[rhythmIndex]) {
-            playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[theBeat.rhythm6[rhythmIndex]] * 0.6, tom3Pitch, contextPlayTime);
-        }
+            if ($.isArray(theBeat.rhythms[playingMeasure][1]) && $.isArray(theBeat.rhythms[playingMeasure][1][playingCount]) && theBeat.rhythms[playingMeasure][1][playingCount][playingNote]) {
+                playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[2] * 0.6, tom2Pitch, contextPlayTime);
+            }
 
+            if ($.isArray(theBeat.rhythms[playingMeasure][0]) && $.isArray(theBeat.rhythms[playingMeasure][0][playingCount]) && theBeat.rhythms[playingMeasure][0][playingCount][playingNote]) {
+                playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[2] * 0.6, tom3Pitch, contextPlayTime);
+            }
+
+        }
         
         // Attempt to synchronize drawing time with sound
         if (noteTime != lastDrawTime) {
             lastDrawTime = noteTime;
-            drawPlayhead((rhythmIndex + 15) % 16);
+            drawPlayhead((rhythmIndex + (totalNotes-1)) % totalNotes);
         }
 
         advanceNote();
@@ -1263,6 +1290,11 @@ function handlePlay(event) {
     playing = true;
     noteTime = 0.0;
     startTime = context.currentTime + 0.005;
+
+    playingMeasure  = 0;
+    playingCount = 0;
+    playingNote = 0;
+
     schedule();
 
     /*document.getElementById('play').classList.add('playing');
@@ -1278,7 +1310,7 @@ function handleStop(event) {
     playing = false;
     clearTimeout(timeoutId);
 
-    var elOld = document.getElementById('LED_' + (rhythmIndex + 14) % 16);
+    var elOld = document.getElementById('led_' + (rhythmIndex + (totalNotes-2)) % totalNotes);
     elOld.src = '/img/editor/LED_off.png';
 
     rhythmIndex = 0;
@@ -1458,10 +1490,10 @@ function drawNote(draw, xindex, yindex) {
 }*/
 
 function drawPlayhead(xindex) {
-    var lastIndex = (xindex + 15) % 16;
+    var lastIndex = (xindex + (totalNotes-1)) % totalNotes;
 
-    var elNew = document.getElementById('LED_' + xindex);
-    var elOld = document.getElementById('LED_' + lastIndex);
+    var elNew = document.getElementById('led_' + xindex);
+    var elOld = document.getElementById('led_' + lastIndex);
     
     elNew.src = '/img/editor/LED_on.png';
     elOld.src = '/img/editor/LED_off.png';

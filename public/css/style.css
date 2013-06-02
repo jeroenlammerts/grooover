@@ -19,8 +19,8 @@ section.content {  }
 #editor_info .row { margin-bottom: 10px; }
 
 #editor_wrap { margin-top: 20px; }
-#editor_container { overflow: auto; height: 375px; }
-#editor { width: 10000px; /*height: 250px; /*background: #ececec;*/ }
+/*#editor_container { overflow: auto; height: 375px; }
+#editor { width: 10000px;  }*/
 #editor > table { width: auto; float: left; margin-right: 15px; margin-bottom: 0; }
 #editor_wrap .table > tbody > tr > td { height: 21px; padding: 2px 4px 2px 4px; }
 #editor_wrap .table > tr > td tr td { padding: 0; }
