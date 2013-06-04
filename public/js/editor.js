@@ -50,7 +50,8 @@ var beats = [
 var measures = 4;
 var counts = 4;
 var countTime = 4;
-var totalNotes = measures*counts*countTime;
+//var totalNotes = measures*counts*countTime;
+var totalNotes;
 
 $(document).ready(function(){
     
@@ -58,7 +59,7 @@ $(document).ready(function(){
     
         var html;
         
-        $.each(kitInstruments, function(i, values) {
+        /*$.each(kitInstruments, function(i, values) {
             html = '<tr><td>'+kitInstruments[i]['name']+'</td></tr>';
             
             var contentValues = '<table class="table table-condensed">';
@@ -74,7 +75,7 @@ $(document).ready(function(){
                 title: 'Legenda',
                 content: contentValues
             });
-        });
+        });*/
 
         $('#editor').bind("contextmenu", function () {
             return false;
@@ -148,6 +149,8 @@ var kMaxSwing = .08;
 
 var currentKit;
 
+var loop = false;
+
 var beatReset = {"kitIndex":0,"effectIndex":0,"tempo":100,"swingFactor":0,"effectMix":0.25,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm3":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm5":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]};
 var beatDemo = [
     {"kitIndex":13,"effectIndex":18,"tempo":120,"swingFactor":0,"effectMix":0.19718309859154926,"kickPitchVal":0.5,"snarePitchVal":0.5,"hihatPitchVal":0.5,"tom1PitchVal":0.5,"tom2PitchVal":0.5,"tom3PitchVal":0.5,"rhythm1":[2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm2":[0,0,0,0,2,0,0,0,0,0,0,0,2,0,0,0],"rhythm3":[0,0,0,0,0,0,2,0,2,0,0,0,0,0,0,0],"rhythm4":[0,0,0,0,0,0,0,0,0,0,0,0,0,0,2,0],"rhythm5":[0,0,2,0,0,0,0,0,0,0,0,0,0,0,0,0],"rhythm6":[0,0,0,0,0,0,0,2,0,2,2,0,0,0,0,0]},
@@ -198,7 +201,7 @@ var mouseCapture = null;
 var mouseCaptureOffset = 0;
 
 //var loopLength = 16;
-var loopLength = measures * counts;
+//var loopLength = measures * counts;
 
 var rhythmIndex = 0;
 var kMinTempo = 50;
@@ -561,6 +564,8 @@ function loadSavedBeat(){
     var elTextarea = document.getElementById('save_textarea');
     theBeat = JSON.parse(elTextarea.value);
 
+    totalNotes = theBeat.rhythms.length*counts*countTime;
+
     theBeat.isKitLoaded = false;
     theBeat.isEffectLoaded = false;
 
@@ -712,6 +717,15 @@ function initControls() {
         }        
     });
 
+    $('#btn_loop').click(function(){
+        $(this).toggleClass('active');
+        if(loop){
+            loop = false;
+        } else {
+            loop = true;
+        }
+    });
+
     $('#save_btn').click(function(e){
         e.preventDefault();
         handleSave();
@@ -754,15 +768,15 @@ function initControls() {
 }
 
 function initButtons() {        
-    var elButton;
+
+    $('#editor').html('Loading beat...');
 
     html = '';
-
     var led = 0;
 
-    for(i=0; i<measures; i++){
+    for(i=0; i<theBeat.rhythms.length; i++){
 
-        html += '<table class="table">';
+        html += '<table class="table" id="measure_' + i + '">';
         html += '   <tr class="first">';
         html += '       <td>';
         html += '           ' + (i+1) + '.';
@@ -771,7 +785,7 @@ function initButtons() {
         html += '           <div class="btn-group pull-right">';
         html += '               <a href="#" class="btn"><i class="icon-edit"></i></a>';
         html += '               <a href="#" class="btn"><i class="icon-trash"></i></a>';
-        html += '               <a href="#" class="btn"><i class="icon-plus"></i></a>';
+        html += '               <a href="javascript: void(0);" class="btn addMeasure"><i class="icon-plus"></i></a>';
         html += '           </div>';
         html += '       </td>';                         
         html += '   </tr>';
@@ -784,10 +798,6 @@ function initButtons() {
                 for(k=0; k<4; k++){
                     //html += '                   <td><input type="text" name="note_' + ki + '_' + i + '_' + j + '_' + k + '" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" placeholder="-" /></td>';
                     html += '                   <td><img src="/img/editor/button_off.png" id="note_' + i + '_' + ki + '_' + j + '_' + k + '" class="note" /></td>';
-
-                    //elButton = document.getElementById('note_' + ki + '_' + i + '_' + j + '_' + k);
-                    //elButton.addEventListener("mousedown", handleButtonMouseDown, true);
-
                 }
                 html += '               </tr>';
                 html += '           </table>';
@@ -834,14 +844,25 @@ function initButtons() {
     $('#editor').html(html);
     $('#editor img.note').click(function(e){
         handleButtonMouseDown(e);
+    });    
+    $('#editor .addMeasure').click(function(e){
+        var measureId = $(this).closest('.table').attr('id').replace('measure_', '');
+        insertMeasure(measureId);
     });
 
-    /*for (i = 0; i < loopLength; ++i) {
-        for (j = 0; j < kNumInstruments; j++) {
-                elButton = document.getElementById(instruments[j] + '_' + i);
-                elButton.addEventListener("mousedown", handleButtonMouseDown, true);
-        }
-    }*/
+}
+
+function insertMeasure(afterMeasure){
+
+    afterMeasure++;
+    handleStop();
+    theBeat.rhythms.splice(afterMeasure, 0, new Array());
+    totalNotes = theBeat.rhythms.length*counts*countTime;
+    initButtons();
+    drawAllNotes();
+
+
+
 }
 
 function makeEffectList() {
@@ -897,6 +918,9 @@ function makeKitList() {
 }
 
 function advanceNote() {
+
+    var stop = false;
+
     // Advance time by a 16th note...
     var secondsPerBeat = 60.0 / theBeat.tempo;
 
@@ -910,8 +934,12 @@ function advanceNote() {
         playingCount = 0;
         playingMeasure++;
     }
-    if(playingMeasure == measures){
+    if(playingMeasure == theBeat.rhythms.length){
         playingMeasure = 0;
+        if(!loop){
+            handleStop();
+            stop = true;
+        }
     }
 
     //console.log(playingNote + ' ' + playingCount + ' ' + playingMeasure);
@@ -927,6 +955,9 @@ function advanceNote() {
     } else {
         noteTime += (0.25 - kMaxSwing * theBeat.swingFactor) * secondsPerBeat;
     }
+
+    return stop;
+
 }
 
 function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTime) {
@@ -964,6 +995,7 @@ function playNote(buffer, pan, x, y, z, sendGain, mainGain, playbackRate, noteTi
 
 function schedule() {
     var currentTime = context.currentTime;
+    var stop;
 
     // The sequence starts at startTime, so normalize currentTime so that it's 0 at the start of the sequence.
     currentTime -= startTime;
@@ -1011,10 +1043,12 @@ function schedule() {
             drawPlayhead((rhythmIndex + (totalNotes-1)) % totalNotes);
         }
 
-        advanceNote();
+        stop = advanceNote();
     }
 
-    timeoutId = setTimeout("schedule()", 0);
+    if(!stop){
+        timeoutId = setTimeout("schedule()", 0);
+    }
 }
 
 function tempoIncrease() {
@@ -1405,6 +1439,7 @@ function handlePlay(event) {
 
     $('#btn_play i').removeClass('icon-play');
     $('#btn_play i').addClass('icon-stop');
+    $('#btn_play').addClass('active');
     
     playing = true;
     noteTime = 0.0;
@@ -1425,12 +1460,12 @@ function handleStop(event) {
 
     $('#btn_play i').removeClass('icon-stop');
     $('#btn_play i').addClass('icon-play');
+    $('#btn_play').removeClass('active');
 
     playing = false;
     clearTimeout(timeoutId);
 
-    var elOld = document.getElementById('led_' + (rhythmIndex + (totalNotes-2)) % totalNotes);
-    elOld.src = '/img/editor/LED_off.png';
+    $('.led').attr('src', '/img/editor/LED_off.png');
 
     rhythmIndex = 0;
 
@@ -1536,8 +1571,7 @@ function loadBeat(beat) {
     return true;
 }
 
-function updateControls() {
-
+function drawAllNotes(){
     for(i=0; i<theBeat.rhythms.length; i++){
 
         if(theBeat.rhythms[i]){
@@ -1556,24 +1590,13 @@ function updateControls() {
             }
         }
 
-    }
+    } 
+}
 
+function updateControls() {
 
-    /*for (i = 0; i < loopLength; ++i) {
-        for (j = 0; j < kNumInstruments; j++) {
-            switch (j) {
-                case 0: notes = theBeat.rhythm1; break;
-                case 1: notes = theBeat.rhythm2; break;
-                case 2: notes = theBeat.rhythm3; break;
-                case 3: notes = theBeat.rhythm4; break;
-                case 4: notes = theBeat.rhythm5; break;
-                case 5: notes = theBeat.rhythm6; break;
-            }
+    drawAllNotes();
 
-            drawNote(notes[i], i, j);
-        }
-    }*/
-    
     $('#active_kit').html(kitNamePretty[theBeat.kitIndex]);
     $('#kit_' + theBeat.kitIndex).addClass('disabled');
     $('#bpm').html(theBeat.tempo);

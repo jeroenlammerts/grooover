@@ -141,13 +141,11 @@
 					<div class="span12">
 						<div class="btn-toolbar" id="editor_controls">
 							<div class="btn-group">
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-backward"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>
+								<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>
 								<a href="javascript: void(0);" class="btn btn-inverse" id="btn_play"><i class="icon-white icon-play"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-pause"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-forward"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-forward"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-repeat"></i></a>
+								<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-pause"></i></a>
+								<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-forward"></i></a>
+								<a href="javascript: void(0);" class="btn btn-inverse" id="btn_loop"><i class="icon-white icon-repeat"></i></a>
 							</div>
 							<div class="btn-group">
 								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
@@ -192,7 +190,7 @@
 					</div>
 
 					<div class="span12" id="editor_container">
-						<div id="editor">Loading...</div>
+						<div id="editor"></div>
 					</div>
 
 				</div>
