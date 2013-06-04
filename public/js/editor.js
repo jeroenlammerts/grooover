@@ -227,6 +227,7 @@ var kitName = [
     "breakbeat9",
     "breakbeat13",
     "acoustic-kit",
+    "acoustic-kit2",
     "4OP-FM",
     "TheCheebacabra1",
     "TheCheebacabra2"
@@ -245,6 +246,7 @@ var kitNamePretty = [
     "Breakbeat 9",
     "Breakbeat 13",
     "Acoustic Kit",
+    "Acoustic Kit 2",
     "4OP-FM",
     "The Cheebacabra 1",
     "The Cheebacabra 2"
@@ -784,7 +786,7 @@ function initButtons() {
         html += '       <td colspan="3">';
         html += '           <div class="btn-group pull-right">';
         html += '               <a href="#" class="btn"><i class="icon-edit"></i></a>';
-        html += '               <a href="#" class="btn"><i class="icon-trash"></i></a>';
+        html += '               <a href="#" class="btn deleteMeasure"><i class="icon-trash"></i></a>';
         html += '               <a href="javascript: void(0);" class="btn addMeasure"><i class="icon-plus"></i></a>';
         html += '           </div>';
         html += '       </td>';                         
@@ -797,7 +799,8 @@ function initButtons() {
                 html += '               <tr>';
                 for(k=0; k<4; k++){
                     //html += '                   <td><input type="text" name="note_' + ki + '_' + i + '_' + j + '_' + k + '" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" placeholder="-" /></td>';
-                    html += '                   <td><img src="/img/editor/button_off.png" id="note_' + i + '_' + ki + '_' + j + '_' + k + '" class="note" /></td>';
+                    //html += '                   <td><img src="/img/editor/button_off.png" id="note_' + i + '_' + ki + '_' + j + '_' + k + '" class="note" /></td>';
+                    html += '                   <td id="note_' + i + '_' + ki + '_' + j + '_' + k + '" class="note inactive">-</td>';
                 }
                 html += '               </tr>';
                 html += '           </table>';
@@ -842,27 +845,49 @@ function initButtons() {
     }
 
     $('#editor').html(html);
-    $('#editor img.note').click(function(e){
+    $('#editor .note').click(function(e){
         handleButtonMouseDown(e);
     });    
     $('#editor .addMeasure').click(function(e){
         var measureId = $(this).closest('.table').attr('id').replace('measure_', '');
         insertMeasure(measureId);
+    });    
+
+    /*$('#deleteWindow').bind('show', function() {
+
+    }).modal({ backdrop: true });*/
+
+    $('#editor .deleteMeasure').click(function(e){
+
+        var measureId = $(this).closest('.table').attr('id').replace('measure_', '');
+
+        $('#deleteWindow').bind('show', function() {
+            $('#deleteReal').click(function(){
+                deleteMeasure(measureId);
+                $('#deleteWindow').modal('hide');
+            });
+        }) .modal({
+            backdrop: true
+        });
+
     });
 
 }
 
 function insertMeasure(afterMeasure){
-
     afterMeasure++;
     handleStop();
     theBeat.rhythms.splice(afterMeasure, 0, new Array());
     totalNotes = theBeat.rhythms.length*counts*countTime;
     initButtons();
     drawAllNotes();
-
-
-
+}
+function deleteMeasure(afterMeasure){
+    handleStop();
+    theBeat.rhythms.splice(afterMeasure, 1);
+    totalNotes = theBeat.rhythms.length*counts*countTime;
+    initButtons();
+    drawAllNotes();
 }
 
 function makeEffectList() {
@@ -1008,18 +1033,35 @@ function schedule() {
 
             // kick
             if ($.isArray(theBeat.rhythms[playingMeasure][5]) && $.isArray(theBeat.rhythms[playingMeasure][5][playingCount]) && theBeat.rhythms[playingMeasure][5][playingCount][playingNote]) {
-                playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[2] * 1.0, kickPitch, contextPlayTime);
+                
+                var noteKey = theBeat.rhythms[playingMeasure][5][playingCount][playingNote];
+                switch(noteKey){
+                    case 'o': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[1] * 1.0, kickPitch, contextPlayTime); break;
+                    case 'O': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[2] * 1.0, kickPitch, contextPlayTime); break;
+                }
+
             }
 
             // Snare
             if ($.isArray(theBeat.rhythms[playingMeasure][4]) && $.isArray(theBeat.rhythms[playingMeasure][4][playingCount]) && theBeat.rhythms[playingMeasure][4][playingCount][playingNote]) {
-                playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[2] * 0.6, snarePitch, contextPlayTime);
+                
+                var noteKey = theBeat.rhythms[playingMeasure][4][playingCount][playingNote];
+                switch(noteKey){
+                    case 'o': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[1] * 0.6, snarePitch, contextPlayTime);
+                    case 'O': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[2] * 0.6, snarePitch, contextPlayTime);
+                }
+                
             }
 
             // Hihat
             if ($.isArray(theBeat.rhythms[playingMeasure][3]) && $.isArray(theBeat.rhythms[playingMeasure][3][playingCount]) && theBeat.rhythms[playingMeasure][3][playingCount][playingNote]) {
-                // Pan the hihat according to sequence position.
-                playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[2] * 0.7, hihatPitch, contextPlayTime);
+
+                var noteKey = theBeat.rhythms[playingMeasure][3][playingCount][playingNote];
+                switch(noteKey){
+                    case 'x': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[1] * 0.7, hihatPitch, contextPlayTime);
+                    case 'X': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[2] * 0.7, hihatPitch, contextPlayTime);
+                }
+                
             }
 
             // Toms    
@@ -1235,11 +1277,48 @@ function handleButtonMouseDown(event) {
         theBeat.rhythms[measureIndex][instrumentIndex][countIndex] = new Array();
     }
 
+
+    if(!theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] || theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] == '-'){
+        var value = kitInstruments[instrumentIndex]['values'][0];
+        theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] = value;
+    } else {
+        var newVal = '-';
+        var value = theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex];
+        $.each(kitInstruments[instrumentIndex]['values'], function(i, item){
+            if(item == value){
+                if((kitInstruments[instrumentIndex]['values'].length-1) > i){
+                    newVal = kitInstruments[instrumentIndex]['values'][i+1];
+                }
+            }
+        });
+
+        theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] = newVal;
+    }
+
+    noteKey = theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex];
+
+
+                    /*if(!$(this).val()){
+                        $(this).val(kitInstruments[index]['values'][0]);
+                    } else {
+                        var newVal = '';
+                        var value = $(this).val();
+                        $.each(kitInstruments[index]['values'], function(i, item){
+                            if(item == value){
+                                if(kitInstruments[index]['values'].length > i){
+                                    newVal = kitInstruments[index]['values'][i+1];
+                                }
+                            }
+                        });
+                        $(this).val(newVal);
+                    }
+
+
     var noteKey = 2;
     if(theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] == 2){
         noteKey = 0
     }
-    theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] = noteKey;
+    theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] = noteKey;*/
 
 /*
     drawNote(notes[rhythmIndex], rhythmIndex, instrumentIndex);*/
@@ -1580,8 +1659,8 @@ function drawAllNotes(){
                     for(k=0; k<theBeat.rhythms[i][j].length; k++){
                         if(theBeat.rhythms[i][j][k]){
                             for(l=0; l<theBeat.rhythms[i][j][k].length; l++){
-                                if(theBeat.rhythms[i][j][k][l] > 0){
-                                    drawNote(2, i, j, k, l);
+                                if(theBeat.rhythms[i][j][k][l]){
+                                    drawNote(theBeat.rhythms[i][j][k][l], i, j, k, l);
                                 }
                             }
                         }
@@ -1617,13 +1696,21 @@ function updateControls() {
 
 function drawNote(draw, measureIndex, instrumentIndex, countIndex, noteIndex) {
 
-    var elButton = document.getElementById('note_' + measureIndex + '_' + instrumentIndex + '_' + countIndex + '_' + noteIndex);
-    //console.log('note_' + measureIndex + '_' + instrumentIndex + '_' + countIndex + '_' + noteIndex);
-    switch (draw) {
-        case 0: elButton.src = '/img/editor/button_off.png'; break;
-        case 1: elButton.src = '/img/editor/button_half.png'; break;
-        case 2: elButton.src = '/img/editor/button_on.png'; break;
+    var elButton = $('#note_' + measureIndex + '_' + instrumentIndex + '_' + countIndex + '_' + noteIndex);
+    
+    elButton.html(draw);
+    if(draw == '-'){
+        elButton.addClass('inactive');
+    } else {
+        elButton.removeClass('inactive');
     }
+     
+
+    /*switch (draw) {
+        case 0: elButton.html('-').addClass('inactive'); break;
+        case 1: elButton.html('x').removeClass('inactive'); break;
+        case 2: elButton.html('X').removeClass('inactive'); break;
+    }*/
 }
 
 /*

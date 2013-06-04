@@ -141,10 +141,10 @@
 					<div class="span12">
 						<div class="btn-toolbar" id="editor_controls">
 							<div class="btn-group">
-								<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>
+								<!--<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>-->
 								<a href="javascript: void(0);" class="btn btn-inverse" id="btn_play"><i class="icon-white icon-play"></i></a>
-								<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-pause"></i></a>
-								<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-forward"></i></a>
+								<!--<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-pause"></i></a>
+								<a href="javascript: void(0);" class="btn btn-inverse"><i class="icon-white icon-forward"></i></a>-->
 								<a href="javascript: void(0);" class="btn btn-inverse" id="btn_loop"><i class="icon-white icon-repeat"></i></a>
 							</div>
 							<div class="btn-group">
@@ -197,5 +197,20 @@
 
 			    {{ Form::button('Save', array('class' => 'btn btn-large pull-right', 'id' => 'save_btn')) }}
 			    {{ Form::close() }}
+
+
+<div id="deleteWindow" class="modal hide fade">
+    <div class="modal-header">
+      <a href="#" class="close" data-dismiss="modal" aria-hidden="true">&times;</a>
+      <h3>Delete measure</h3>
+    </div>
+    <div class="modal-body">
+      <p>Do you really want to delete this measure?</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#" class="btn btn-danger" id="deleteReal">Yes</a>
+      <a href="#" class="btn btn-secondary" data-dismiss="modal" >No</a>
+    </div>
+</div>			    
 
 @endsection
