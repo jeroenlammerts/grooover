@@ -210,7 +210,7 @@ var noteTime = 0.0;
 
 var instruments = ['Kick', 'Snare', 'HiHat', 'Tom1', 'Tom2', 'Tom3'];
 
-var volumes = [0, 0.3, 1];
+var volumes = [0, 0.3, 1, 2];
 
 var kitCount = 0;
 
@@ -297,6 +297,7 @@ Kit.prototype.load = function() {
     var tom1Path = pathName + "tom1.wav";
     var tom2Path = pathName + "tom2.wav";
     var tom3Path = pathName + "tom3.wav";
+    var openHihatPath = pathName + "open_hihat.wav";
 
     this.loadSample(0, kickPath, false);
     this.loadSample(1, snarePath, false);
@@ -304,6 +305,7 @@ Kit.prototype.load = function() {
     this.loadSample(3, tom1Path, false);
     this.loadSample(4, tom2Path, false);
     this.loadSample(5, tom3Path, false);
+    this.loadSample(6, openHihatPath, true);
 }
 
 Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
@@ -324,6 +326,7 @@ Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
             case 3: kit.tom1 = buffer; break;
             case 4: kit.tom2 = buffer; break;
             case 5: kit.tom3 = buffer; break;
+            case 6: kit.openHihat = buffer; break;
         }
 
         kit.instrumentLoadCount++;
@@ -1036,8 +1039,8 @@ function schedule() {
                 
                 var noteKey = theBeat.rhythms[playingMeasure][5][playingCount][playingNote];
                 switch(noteKey){
-                    case 'o': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[1] * 1.0, kickPitch, contextPlayTime); break;
-                    case 'O': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[2] * 1.0, kickPitch, contextPlayTime); break;
+                    case 'o': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[2] * 1.0, kickPitch, contextPlayTime); break;
+                    case 'O': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[3] * 1.0, kickPitch, contextPlayTime); break;
                 }
 
             }
@@ -1047,8 +1050,9 @@ function schedule() {
                 
                 var noteKey = theBeat.rhythms[playingMeasure][4][playingCount][playingNote];
                 switch(noteKey){
-                    case 'o': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[1] * 0.6, snarePitch, contextPlayTime);
-                    case 'O': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[2] * 0.6, snarePitch, contextPlayTime);
+                    case 'o': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[2] * 0.6, snarePitch, contextPlayTime); break;
+                    case 'O': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[3] * 0.6, snarePitch, contextPlayTime); break;
+                    case 'g': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[1] * 0.6, snarePitch, contextPlayTime); break;
                 }
                 
             }
@@ -1058,8 +1062,10 @@ function schedule() {
 
                 var noteKey = theBeat.rhythms[playingMeasure][3][playingCount][playingNote];
                 switch(noteKey){
-                    case 'x': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[1] * 0.7, hihatPitch, contextPlayTime);
-                    case 'X': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[2] * 0.7, hihatPitch, contextPlayTime);
+                    case 'x': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[2] * 0.7, hihatPitch, contextPlayTime); break;
+                    case 'X': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[3] * 0.7, hihatPitch, contextPlayTime); break;
+                    case 'o': playNote(currentKit.openHihat, true, -0.2, 0, -1.0, 1, volumes[2] * 0.7, hihatPitch, contextPlayTime); break;
+                    case 'O': playNote(currentKit.openHihat, true, -0.2, 0, -1.0, 1, volumes[3] * 0.7, hihatPitch, contextPlayTime); break;
                 }
                 
             }
