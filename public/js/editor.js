@@ -1,4 +1,6 @@
 
+
+
 var kitInstruments = [
     {
         'name':'Tom 1',
@@ -45,7 +47,7 @@ var beats = [
     }
 ];*/
 
-var measures = 2;
+var measures = 4;
 var counts = 4;
 var countTime = 4;
 var totalNotes = measures*counts*countTime;
@@ -641,7 +643,7 @@ function initControls() {
     makeEffectList();
 
     // sliders
-    document.getElementById('effect_thumb').addEventListener('mousedown', handleSliderMouseDown, true);
+    /*document.getElementById('effect_thumb').addEventListener('mousedown', handleSliderMouseDown, true);
     document.getElementById('tom1_thumb').addEventListener('mousedown', handleSliderMouseDown, true);
     document.getElementById('tom2_thumb').addEventListener('mousedown', handleSliderMouseDown, true);
     document.getElementById('tom3_thumb').addEventListener('mousedown', handleSliderMouseDown, true);
@@ -657,7 +659,7 @@ function initControls() {
     document.getElementById('hihat_thumb').addEventListener('dblclick', handleSliderDoubleClick, true);
     document.getElementById('snare_thumb').addEventListener('dblclick', handleSliderDoubleClick, true);
     document.getElementById('kick_thumb').addEventListener('dblclick', handleSliderDoubleClick, true);
-    document.getElementById('swing_thumb').addEventListener('dblclick', handleSliderDoubleClick, true);
+    document.getElementById('swing_thumb').addEventListener('dblclick', handleSliderDoubleClick, true);*/
 
     // tool buttons
     /*document.getElementById('play').addEventListener('mousedown', handlePlay, true);
@@ -689,12 +691,27 @@ function initControls() {
     document.getElementById('demo4').addEventListener('mousedown', handleDemoMouseDown, true);
     document.getElementById('demo5').addEventListener('mousedown', handleDemoMouseDown, true);
 
-    var elBody = document.getElementById('body');
+    /*var elBody = document.getElementById('body');
     elBody.addEventListener('mousemove', handleMouseMove, true);
-    elBody.addEventListener('mouseup', handleMouseUp, true);
+    elBody.addEventListener('mouseup', handleMouseUp, true);*/
 
-    document.getElementById('tempoinc').addEventListener('mousedown', tempoIncrease, true);
-    document.getElementById('tempodec').addEventListener('mousedown', tempoDecrease, true);
+    $('#bpm_up').click(function(){
+        tempoIncrease();
+    });
+
+    $('#bpm_down').click(function(){
+        tempoDecrease();
+    });
+
+    $('#swing_slider').slider({
+        min: 0,
+        max: 1,
+        step: 0.1,
+        tooltip: 'hide'
+    }).on('slideStop', function(e){
+        sliderSetValue('swing_thumb', e.value);
+    });
+
 }
 
 function initButtons() {        
@@ -747,7 +764,7 @@ function initButtons() {
             html += '               <tr>';
             for(k=0; k<4; k++){
                 //html += '                   <td><img id="LED_' + i + '_' + j + '_' + k + '" src="/img/editor/LED_off.png"></td>';
-                html += '                   <td><img id="led_' + led + '" src="/img/editor/LED_off.png"></td>';
+                html += '                   <td><img id="led_' + led + '" src="/img/editor/LED_off.png" class="led"></td>';
                 led++;
             }
             html += '               </tr>';
@@ -829,18 +846,14 @@ function makeKitList() {
 
     html = '';
     for (var i = 0; i < numKits; i++) {
-        html += '<li id="kit_' + i + '"'; 
-        if(i == theBeat.kitIndex){
-            html += 'class="disabled"';
-        }
-        html += '><a href="javascript: void(0);">' + kitNamePretty[i] + '</a></li>';
+        html += '<li id="kit_' + i + '"><a href="javascript: void(0);">' + kitNamePretty[i] + '</a></li>';
     }
 
     $('#kits_list').html(html);
     $('#kits_list a').click(function(e){
         handleKitMouseDown($(this));
     });
-    $('#active_kit').html(kitNamePretty[theBeat.kitIndex]);
+    //$('#active_kit').html(kitNamePretty[theBeat.kitIndex]);
 
 }
 
@@ -967,12 +980,12 @@ function schedule() {
 
 function tempoIncrease() {
     theBeat.tempo = Math.min(kMaxTempo, theBeat.tempo+4);
-    document.getElementById('tempo').innerHTML = theBeat.tempo;
+    $('#bpm').html(theBeat.tempo);
 }
 
 function tempoDecrease() {
     theBeat.tempo = Math.max(kMinTempo, theBeat.tempo-4);
-    document.getElementById('tempo').innerHTML = theBeat.tempo;
+    $('#bpm').html(theBeat.tempo);
 }
 
 function handleSliderMouseDown(event) {
@@ -1252,8 +1265,6 @@ function handleEffectComboMouseDown(event) {
 
 function handleEffectMouseDown(button) {
 
-    console.log('test');
-
     for (var i = 0; i < impulseResponseInfoList.length; ++i) {
         if (impulseResponseInfoList[i].name == button.html()) {
 
@@ -1512,18 +1523,21 @@ function updateControls() {
             drawNote(notes[i], i, j);
         }
     }*/
+    
+    $('#active_kit').html(kitNamePretty[theBeat.kitIndex]);
+    $('#kit_' + theBeat.kitIndex).addClass('disabled');
+    $('#bpm').html(theBeat.tempo);
 
-    document.getElementById('kitname').innerHTML = kitNamePretty[theBeat.kitIndex];
-    document.getElementById('effectname').innerHTML = impulseResponseInfoList[theBeat.effectIndex].name;
-    document.getElementById('tempo').innerHTML = theBeat.tempo;
-    sliderSetPosition('swing_thumb', theBeat.swingFactor);
+    $('#swing_slider').slider('setValue', theBeat.swingFactor);
+
+    /*sliderSetPosition('swing_thumb', theBeat.swingFactor);
     sliderSetPosition('effect_thumb', theBeat.effectMix);
     sliderSetPosition('kick_thumb', theBeat.kickPitchVal);
     sliderSetPosition('snare_thumb', theBeat.snarePitchVal);
     sliderSetPosition('hihat_thumb', theBeat.hihatPitchVal);
     sliderSetPosition('tom1_thumb', theBeat.tom1PitchVal);        
     sliderSetPosition('tom2_thumb', theBeat.tom2PitchVal);
-    sliderSetPosition('tom3_thumb', theBeat.tom3PitchVal);
+    sliderSetPosition('tom3_thumb', theBeat.tom3PitchVal);*/
 }
 
 function drawNote(draw, measureIndex, instrumentIndex, countIndex, noteIndex) {

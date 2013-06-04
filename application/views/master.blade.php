@@ -101,6 +101,7 @@
 	{{ HTML::script('js/jquery.js') }}
 	{{ HTML::script('js/bootstrap.min.js') }}
 	{{ HTML::script('js/script.js') }}	
+	{{ HTML::script('js/bootstrap-slider.js') }}	
 	{{ HTML::script('js/editor.js') }}
 </body>
 </html>

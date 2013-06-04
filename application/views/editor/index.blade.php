@@ -38,7 +38,7 @@
 					            <div id='tempo_container'>
 					                <span class='editor_label' id='tempolabel'>Tempo</span>
 					                <div id='tempodisplay'>
-					                <span id='tempo'></span>&nbsp;<span id='bpm'>bpm</span>
+					                <span id='tempo'></span>&nbsp;
 					                </div>
 					                <img id='tempodec' src='/img/editor/tempo_dec.png'><img id='tempoinc' src='/img/editor/tempo_inc.png'>
 					            </div>
@@ -134,15 +134,48 @@
 
 					    <textarea id='save_textarea' name="data" spellcheck='false'>{{ $data }}</textarea>
 
-
-					    {{ Form::button('Save', array('class' => 'btn', 'id' => 'save_btn')) }}
-
-					    {{ Form::close() }}
-
 					</div>
 				</div>	
 
-
+				<div class="row" id="editor_contols">
+					<div class="span12">
+						<div class="btn-toolbar">
+							<div class="btn-group">
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-backward"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>
+								<a href="javascript: void(0);" class="btn btn-inverse" id="btn_play"><i class="icon-white icon-play"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-pause"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-forward"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-forward"></i></a>
+								<a href="#" class="btn btn-inverse"><i class="icon-white icon-repeat"></i></a>
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
+									<span id="active_kit">Loading..</span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" id="kits_list"></ul>
+							</div>
+							<div class="btn-group">
+								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
+									<span id="active_effect">Loading..</span>
+									<span class="caret"></span>
+								</a>
+								<ul class="dropdown-menu" id="effects_list"></ul>
+							</div>
+							<div class="btn-group">
+								<a href="javascript: void(0);" class="btn btn-inverse"><span id="bpm">120</span> BPM</a>
+								<a href="javascript: void(0);" class="btn btn-inverse" id="bpm_up"><i class="icon-white icon-plus"></i></a>
+								<a href="javascript: void(0);" class="btn btn-inverse" id="bpm_down"><i class="icon-white icon-minus"></i></a>
+							</div>
+							<div class="btn-group">
+								<a href="javascript: void(0);" class="btn btn-inverse">
+									<span class="swing">Swing</span><input type="text" id="swing_slider" value="" />
+								</a>
+							</div>
+						</div>					
+					</div>
+				</div>
 
 				<div class="row" id="editor_wrap">
 
@@ -158,50 +191,13 @@
 						</table>
 					</div>
 
-					<div class="span10" id="editor_container">
+					<div class="span12" id="editor_container">
 						<div id="editor">Loading...</div>
 					</div>
 
 				</div>
 
-				<div class="row" id="editor_contols">
-					<div class="span10 offset2">
-						<div class="btn-toolbar">
-							<div class="btn-group">
-								<!--<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-backward"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>-->
-								<a href="javascript: void(0);" class="btn btn-inverse" id="btn_play"><i class="icon-white icon-play"></i></a>
-								<!--<a href="#" class="btn btn-inverse"><i class="icon-white icon-pause"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-forward"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-forward"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-repeat"></i></a>-->
-							</div>
-							<div class="btn-group">
-								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
-									<span id="active_kit"></span>
-									<span class="caret"></span>
-								</a>
-								<ul class="dropdown-menu" id="kits_list"></ul>
-							</div>
-							<div class="btn-group">
-								<a class="btn btn-inverse dropdown-toggle" data-toggle="dropdown" href="#">
-									<span id="active_effect"></span>
-									<span class="caret"></span>
-								</a>
-								<ul class="dropdown-menu" id="effects_list"></ul>
-							</div>
-							<div class="btn-group">
-								<a href="#" class="btn btn-inverse">120 BPM</a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-plus"></i></a>
-								<a href="#" class="btn btn-inverse"><i class="icon-white icon-minus"></i></a>
-								<a href="#" class="btn btn-inverse">Swing</a>
-							</div>
-						</div>					
-
-						<button class="btn btn-large pull-right" type="submit" id="save_editor">Opslaan</button>						
-
-					</div>
-
-				</div>
+			    {{ Form::button('Save', array('class' => 'btn btn-large pull-right', 'id' => 'save_btn')) }}
+			    {{ Form::close() }}
 
 @endsection
