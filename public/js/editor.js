@@ -75,59 +75,6 @@ $(document).ready(function(){
                 content: contentValues
             });
         });
-        
-        /*html = '';
-
-        for(i=1; i<=measures; i++){
-
-            html += '<table class="table">';
-            html += '   <tr class="first">';
-            html += '       <td>';
-            html += '           ' + i + '.';
-            html += '       </td>';
-            html += '       <td colspan="3">';
-            html += '           <div class="btn-group pull-right">';
-            html += '               <a href="#" class="btn"><i class="icon-edit"></i></a>';
-            html += '               <a href="#" class="btn"><i class="icon-trash"></i></a>';
-            html += '               <a href="#" class="btn"><i class="icon-plus"></i></a>';
-            html += '           </div>';
-            html += '       </td>';                         
-            html += '   </tr>';
-            for(ki=1; ki<=kitInstruments.length; ki++){
-            html += '   <tr>';
-                for(j=1; j<=count; j++){
-                    html += '       <td>';
-                    html += '           <table>';
-                    html += '               <tr>';
-                    for(k=1; k<=4; k++){
-                        //html += '                   <td><input type="text" name="note_' + ki + '_' + i + '_' + j + '_' + k + '" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" placeholder="-" /></td>';
-                        html += '                   <td><img src="/img/editor/button_off.png" id="note_' + ki + '_' + i + '_' + j + '_' + k + '" /></td>';
-                    }
-                    html += '               </tr>';
-                    html += '           </table>';
-                    html += '       </td>';
-                }
-                html += '   </tr>';
-            }
-            html += '   <tr>';
-            for(j=1; j<=count; j++){
-                html += '       <td>';
-                html += '           <table class="count">';
-                html += '               <tr>';
-                html += '                   <td>' + j + '</td>';
-                html += '                   <td>e</td>';
-                html += '                   <td>+</td>';
-                html += '                   <td>a</td>';
-                html += '               </tr>';
-                html += '           </table>';                                  
-                html += '       </td>'; 
-            }                       
-            html += '   </tr>';
-            html += '</table>';
-
-        }
-
-        $('#editor').html(html);*/
 
         $('#editor').bind("contextmenu", function () {
             return false;
@@ -318,11 +265,17 @@ function Kit(name) {
     this.startedLoading = false;
     this.isLoaded = false;
     
-    this.demoIndex = -1;
+    this.firstLoad = false;
+
+    this.callback = null;
 }
 
-Kit.prototype.setDemoIndex = function(index) {
-    this.demoIndex = index;
+Kit.prototype.setCallback = function(callback) {
+    this.callback = callback;
+}
+
+Kit.prototype.setFirstLoad = function() {
+    this.firstLoad = true;
 }
 
 Kit.prototype.load = function() {
@@ -372,8 +325,11 @@ Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
         if (kit.instrumentLoadCount == kit.instrumentCount) {
             kit.isLoaded = true;
 
-            if (kit.demoIndex != -1) {
-                beatDemo[kit.demoIndex].setKitLoaded();
+            if (kit.firstLoad) {
+                theBeat.setKitLoaded();
+            }
+            if(kit.callback != null){
+                kit.callback();
             }
         }
     }
@@ -420,11 +376,17 @@ function ImpulseResponse(url, index) {
     this.isLoaded_ = false;
     this.buffer = 0;
     
-    this.demoIndex = -1; // no demo
+    this.firstLoad = false;
+
+    this.callback = null;
 }
 
-ImpulseResponse.prototype.setDemoIndex = function(index) {
-    this.demoIndex = index;
+ImpulseResponse.prototype.setCallback = function(callback) {
+    this.callback = callback;
+}
+
+ImpulseResponse.prototype.setFirstLoad = function() {
+    this.firstLoad = true;
 }
 
 ImpulseResponse.prototype.isLoaded = function() {
@@ -450,9 +412,12 @@ ImpulseResponse.prototype.load = function() {
         asset.buffer = context.createBuffer(request.response, false);
         asset.isLoaded_ = true;
         
-        if (asset.demoIndex != -1) {
-            beatDemo[asset.demoIndex].setEffectLoaded();
+        if (asset.firstLoad) {
+            theBeat.setEffectLoaded();
         }
+        if(asset.callback != null){
+            asset.callback();
+        }        
     }
 
     request.send();
@@ -470,10 +435,33 @@ function startLoadingAssets() {
     kits = new Array(numKits);
     for (var i  = 0; i < numKits; i++) {
         kits[i] = new Kit(kitName[i]);
-    }  
+    }
+
+    //console.log('startLoadingAssets');
+    //console.log(theBeat);
+
+    if(theBeat.effectIndex > 0){
+        var effect = impulseResponseList[theBeat.effectIndex];
+        effect.setFirstLoad();
+        effect.load();
+    } else {
+        theBeat.setEffectLoaded();
+    }
+
+    var kit = kits[theBeat.kitIndex];
+    kit.setFirstLoad();
+    kit.load();
+
+    // These effects and kits will keep track of a particular demo, so we can change
+    // the loading status in the UI.
+    /***effect.setDemoIndex(demoIndex);
+    kit.setDemoIndex(demoIndex);*/
+    
+    
+        
     
     // Start loading the assets used by the presets first, in order of the presets.
-    for (var demoIndex = 0; demoIndex < 5; ++demoIndex) {
+    /*for (var demoIndex = 0; demoIndex < 5; ++demoIndex) {
         var effect = impulseResponseList[beatDemo[demoIndex].effectIndex];
         var kit = kits[beatDemo[demoIndex].kitIndex];
         
@@ -484,21 +472,25 @@ function startLoadingAssets() {
         
         effect.load();
         kit.load();
-    }
+    }*/
+
+    // Setup initial drumkit
+    currentKit = kits[theBeat.kitIndex];    
     
     // Then load the remaining assets.
     // Note that any assets which have previously started loading will be skipped over.
+   /* 
+    var numKits = kitName.length;
     for (var i  = 0; i < numKits; i++) {
         kits[i].load();
-    }  
+    } 
 
     // Start at 1 to skip "No Effect"
     for (i = 1; i < impulseResponseInfoList.length; i++) {
         impulseResponseList[i].load();
     }
-    
-    // Setup initial drumkit
-    currentKit = kits[kInitialKitIndex];
+    */
+
 }
 
 function demoButtonURL(demoIndex) {
@@ -565,10 +557,55 @@ function showPlayAvailable() {
 
 }
 
+function loadSavedBeat(){
+    var elTextarea = document.getElementById('save_textarea');
+    theBeat = JSON.parse(elTextarea.value);
+
+    theBeat.isKitLoaded = false;
+    theBeat.isEffectLoaded = false;
+
+    theBeat.setKitLoaded = function() {
+        this.isKitLoaded = true;
+        this.checkIsLoaded();
+    };
+
+    theBeat.setEffectLoaded = function() {
+        this.isEffectLoaded = true;
+        this.checkIsLoaded();
+    };
+
+    theBeat.checkIsLoaded = function() {
+        if (this.isLoaded()) {
+
+            setEffect(theBeat.effectIndex);
+            setEffectLevel(theBeat);
+
+            sliderSetValue('effect_thumb', theBeat.effectMix);
+            sliderSetValue('kick_thumb', theBeat.kickPitchVal);
+            sliderSetValue('snare_thumb', theBeat.snarePitchVal);
+            sliderSetValue('hihat_thumb', theBeat.hihatPitchVal);
+            sliderSetValue('tom1_thumb', theBeat.tom1PitchVal);
+            sliderSetValue('tom2_thumb', theBeat.tom2PitchVal);
+            sliderSetValue('tom3_thumb', theBeat.tom3PitchVal);
+            sliderSetValue('swing_thumb', theBeat.swingFactor);
+
+            updateControls();
+
+        }
+    };
+
+    theBeat.isLoaded = function() {
+        return this.isKitLoaded && this.isEffectLoaded;
+    };
+
+}
+
+
+
 function init() {
     // Let the beat demos know when all of their assets have been loaded.
     // Add some new methods to support this.
-    for (var i = 0; i < beatDemo.length; ++i) {
+    /*for (var i = 0; i < beatDemo.length; ++i) {
         beatDemo[i].index = i;
         beatDemo[i].isKitLoaded = false;
         beatDemo[i].isEffectLoaded = false;
@@ -592,7 +629,9 @@ function init() {
         beatDemo[i].isLoaded = function() {
             return this.isKitLoaded && this.isEffectLoaded;
         };
-    }
+    }*/
+
+    loadSavedBeat();
         
     startLoadingAssets();
 
@@ -1212,18 +1251,22 @@ function handleKitComboMouseDown(event) {
 function handleKitMouseDown(button) {
 
     var index = kitNamePretty.indexOf(button.html());
-    theBeat.kitIndex = index;
-    currentKit = kits[index];
     $('#active_kit').html(kitNamePretty[index]);
     $('#kits_list .disabled').removeClass('disabled');
     $('#kit_' + index).addClass('disabled');
 
-
-    /*
-    var index = kitNamePretty.indexOf(event.target.innerHTML);
-    theBeat.kitIndex = index;
-    currentKit = kits[index];
-    document.getElementById('kitname').innerHTML = kitNamePretty[index];*/
+    newKit = kits[index];
+    if(!newKit.isLoaded){
+        newKit.setCallback(function(){
+            theBeat.kitIndex = index
+            currentKit = kits[index];
+        });
+        newKit.load();
+    } else {
+        theBeat.kitIndex = index
+        currentKit = kits[index];
+    }
+    
 }
 
 function handleBodyMouseDown(event) {
@@ -1278,46 +1321,53 @@ function handleEffectMouseDown(button) {
         }
     }
 
-    /*for (var i = 0; i < impulseResponseInfoList.length; ++i) {
-        if (impulseResponseInfoList[i].name == event.target.innerHTML) {
-
-            // Hack - if effect is turned all the way down - turn up effect slider.
-            // ... since they just explicitly chose an effect from the list.
-            if (theBeat.effectMix == 0)
-                theBeat.effectMix = 0.5;
-
-            setEffect(i);
-            break;
-        }
-    }*/
-
 }
 
 function setEffect(index) {
-    if (index > 0 && !impulseResponseList[index].isLoaded()) {
-        alert('Sorry, this effect is still loading.  Try again in a few seconds :)');
-        return;
-    }
-
-    theBeat.effectIndex = index;
-    effectDryMix = impulseResponseInfoList[index].dryMix;
-    effectWetMix = impulseResponseInfoList[index].wetMix;            
-    convolver.buffer = impulseResponseList[index].buffer;
-
-  // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
-  // then put the effect level all the way up.
-    if (effectDryMix == 0)
-        theBeat.effectMix = 1;
-
-    setEffectLevel(theBeat);
-    sliderSetValue('effect_thumb', theBeat.effectMix);
-    updateControls();
 
     $('#active_effect').html(impulseResponseInfoList[index].name);
     $('#effects_list .disabled').removeClass('disabled');
     $('#effect_' + index).addClass('disabled');
 
-    //document.getElementById('effectname').innerHTML = impulseResponseInfoList[index].name;
+    newEffect = impulseResponseList[index];
+    if(index > 0 && !newEffect.isLoaded()){
+
+        newEffect.setCallback(function(){
+
+            theBeat.effectIndex = index;
+            effectDryMix = impulseResponseInfoList[index].dryMix;
+            effectWetMix = impulseResponseInfoList[index].wetMix;            
+            convolver.buffer = impulseResponseList[index].buffer;
+
+          // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
+          // then put the effect level all the way up.
+            if (effectDryMix == 0)
+                theBeat.effectMix = 1;
+
+            setEffectLevel(theBeat);
+            sliderSetValue('effect_thumb', theBeat.effectMix);
+            updateControls();
+
+        });
+        newEffect.load();
+    } else {
+
+            theBeat.effectIndex = index;
+            effectDryMix = impulseResponseInfoList[index].dryMix;
+            effectWetMix = impulseResponseInfoList[index].wetMix;            
+            convolver.buffer = impulseResponseList[index].buffer;
+
+          // Hack - if the effect is meant to be entirely wet (not unprocessed signal)
+          // then put the effect level all the way up.
+            if (effectDryMix == 0)
+                theBeat.effectMix = 1;
+
+            setEffectLevel(theBeat);
+            sliderSetValue('effect_thumb', theBeat.effectMix);
+            updateControls();
+
+    }
+
 }
 
 function setEffectLevel() {        
@@ -1529,6 +1579,8 @@ function updateControls() {
     $('#bpm').html(theBeat.tempo);
 
     $('#swing_slider').slider('setValue', theBeat.swingFactor);
+
+    $('#editor_controls').show();
 
     /*sliderSetPosition('swing_thumb', theBeat.swingFactor);
     sliderSetPosition('effect_thumb', theBeat.effectMix);

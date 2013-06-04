@@ -139,7 +139,7 @@
 
 				<div class="row" id="editor_contols">
 					<div class="span12">
-						<div class="btn-toolbar">
+						<div class="btn-toolbar" id="editor_controls">
 							<div class="btn-group">
 								<a href="#" class="btn btn-inverse"><i class="icon-white icon-fast-backward"></i></a>
 								<a href="#" class="btn btn-inverse"><i class="icon-white icon-backward"></i></a>
@@ -164,7 +164,7 @@
 								<ul class="dropdown-menu" id="effects_list"></ul>
 							</div>
 							<div class="btn-group">
-								<a href="javascript: void(0);" class="btn btn-inverse"><span id="bpm">120</span> BPM</a>
+								<a href="javascript: void(0);" class="btn btn-inverse"><span id="bpm"></span> BPM</a>
 								<a href="javascript: void(0);" class="btn btn-inverse" id="bpm_up"><i class="icon-white icon-plus"></i></a>
 								<a href="javascript: void(0);" class="btn btn-inverse" id="bpm_down"><i class="icon-white icon-minus"></i></a>
 							</div>

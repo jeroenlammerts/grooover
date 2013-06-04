@@ -63,3 +63,5 @@ section.content {  }
 
 img.note { width: 35px; height: 35px; }
 img.led { width: 35px; }
+
+#editor_controls { display: none; }
