@@ -213,7 +213,7 @@ var instruments = ['Kick', 'Snare', 'HiHat', 'Tom1', 'Tom2', 'Tom3'];
 var volumes = [0, 0.3, 1, 2];
 
 var kitCount = 0;
-
+/*
 var kitName = [
     "R8",
     "CR78",
@@ -250,6 +250,14 @@ var kitNamePretty = [
     "4OP-FM",
     "The Cheebacabra 1",
     "The Cheebacabra 2"
+    ];
+*/
+var kitName = [
+    "acoustic-kit2"
+    ];
+
+var kitNamePretty = [
+    "Acoustic Kit"
     ];
 
 function Kit(name) {
@@ -781,6 +789,31 @@ function initButtons() {
 
     for(i=0; i<theBeat.rhythms.length; i++){
 
+        if(i==0 || (i % 2 == 0)){
+
+            html += '<table class="instruments" id="instruments_' + i + '">';
+            var ie = i;
+            $.each(kitInstruments, function(i, values) {
+                html += '<tr><td>'+kitInstruments[i]['name']+'</td></tr>';
+                
+                var contentValues = '<table class="table table-condensed">';
+                $.each(kitInstruments[i]['values'], function(j, item){
+                    contentValues += '<tr><td>' + item + '</td><td class="description">' + kitInstruments[i]['valueNames'][j] + '</tr>';
+                });
+                contentValues += '</table>';
+                
+                /*$(html).insertBefore('#instruments_' + ie + ' tr:last').popover({
+                    html : true,
+                    trigger : 'hover',
+                    placement: 'right',
+                    title: 'Legenda',
+                    content: contentValues
+                });*/
+            });
+            html += '</table>';
+
+        }    
+
         html += '<table class="table" id="measure_' + i + '">';
         html += '   <tr class="first">';
         html += '       <td>';
@@ -813,6 +846,21 @@ function initButtons() {
         }      
 
         html += '   <tr>';
+        for(j=1; j<=counts; j++){
+            html += '       <td>';
+            html += '           <table class="count">';
+            html += '               <tr>';
+            html += '                   <td>' + j + '</td>';
+            html += '                   <td>e</td>';
+            html += '                   <td>+</td>';
+            html += '                   <td>a</td>';
+            html += '               </tr>';
+            html += '           </table>';                                  
+            html += '       </td>'; 
+        }                       
+        html += '   </tr>'; 
+
+        html += '   <tr>';
         for(j=0; j<counts; j++){
             html += '       <td>';
             html += '           <table>';
@@ -828,28 +876,21 @@ function initButtons() {
         }                       
         html += '   </tr>';
 
-        /*html += '   <tr>';
-        for(j=1; j<=count; j++){
-            html += '       <td>';
-            html += '           <table class="count">';
-            html += '               <tr>';
-            html += '                   <td>' + j + '</td>';
-            html += '                   <td>e</td>';
-            html += '                   <td>+</td>';
-            html += '                   <td>a</td>';
-            html += '               </tr>';
-            html += '           </table>';                                  
-            html += '       </td>'; 
-        }                       
-        html += '   </tr>'; */
-
-        html += '</table>';
+        html += '</table>';    
 
     }
 
     $('#editor').html(html);
-    $('#editor .note').click(function(e){
-        handleButtonMouseDown(e);
+    $('#editor .note').mousedown(function(e){
+        switch(e.which){
+            case 1:
+                noteLeftClick(e);
+                break;
+            case 3:
+                noteRightClick(e);
+                break
+        }
+        
     });    
     $('#editor .addMeasure').click(function(e){
         var measureId = $(this).closest('.table').attr('id').replace('measure_', '');
@@ -1241,7 +1282,7 @@ function sliderSetPosition(slider, value) {
     }
 }
 
-function handleButtonMouseDown(event) {
+function noteLeftClick(event) {
     var notes = theBeat.rhythm1;
     
     var instrumentIndex;
@@ -1361,6 +1402,44 @@ function handleButtonMouseDown(event) {
           break;
         }
     }*/
+}
+
+function noteRightClick(e){
+
+    console.log('right click');
+
+    var notes = theBeat.rhythm1;
+    
+    var instrumentIndex;
+    var rhythmIndex = 2;
+
+    var elId = event.target.id;
+
+    var noteInfo = elId.split('_');
+    var measureIndex = noteInfo[1];
+    var instrumentIndex = noteInfo[2];
+    var countIndex = noteInfo[3];
+    var noteIndex = noteInfo[4];  
+
+    if(!$.isArray(theBeat.rhythms)){
+        theBeat.rhythms = new Array();
+    }    
+    if(!$.isArray(theBeat.rhythms[measureIndex])){
+        theBeat.rhythms[measureIndex] = new Array();
+    }    
+    if(!$.isArray(theBeat.rhythms[measureIndex][instrumentIndex])){
+        theBeat.rhythms[measureIndex][instrumentIndex] = new Array();
+    }    
+    if(!$.isArray(theBeat.rhythms[measureIndex][instrumentIndex][countIndex])){
+        theBeat.rhythms[measureIndex][instrumentIndex][countIndex] = new Array();
+    }
+
+    noteKey = '-';
+
+    theBeat.rhythms[measureIndex][instrumentIndex][countIndex][noteIndex] = noteKey;
+
+    drawNote(noteKey, measureIndex, instrumentIndex, countIndex, noteIndex);
+
 }
 
 function handleKitComboMouseDown(event) {

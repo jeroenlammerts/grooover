@@ -57,92 +57,47 @@ class Patterns_Controller extends Base_Controller
 
 	public function get_editor($pattern_id = 0)
 	{
-		
-		/*$array = array(
-			"kitIndex" => 3,
-			"rhythms" => array(
-				array(
-					"rhythm1" => array(
-						array(
-							array('x', '', 'x', ''),
-							array('x', '', 'x', ''),
-							array('x', '', 'x', ''),
-							array('x', '', 'x', '')
-						),
-						array(
-							array('x', '', 'x', ''),
-							array('x', '', 'x', ''),
-							array('x', '', 'x', ''),
-							array('x', '', 'x', '')
-						)
-					)
-				)
-			)
 
-		);
-
-		return Response::json($array);
-
-		die();*/
-
-		$data = '';
 		if($pattern_id){
 			$pattern = Pattern::find($pattern_id);
-			$data = $pattern->data;
 		}	
 		
+		$pattern_types = DB::table('pattern_types')->order_by('name', 'asc')->get();
+		$genres = DB::table('genres')->order_by('name', 'asc')->get();
+		$artists = DB::table('artists')->order_by('name', 'asc')->get();
+		$songs = DB::table('songs')->order_by('name', 'asc')->get();		
 
 		$title = "Editor";
 		return View::make('editor.index')
 			->with('title', $title)
 			->with('pattern_id', $pattern_id)
-			->with('data', $data);
-	}
-
-	public function get_json()
-	{
-		
-		$array = array(
-			'measures' => array(
-				array(
-					'time' => 4,
-					'counts' => array(
-						array(
-							'time' => 4,
-							'instrument' => 0,
-							'notes' => array('x', '', 'x', '')
-						)
-					)
-				)
-			),
-			'instruments' => array(
-				array(
-					'name' => 'Hihat'
-				)
-			),
-			'bpm' => 120
-			
-		);
-
-		return Response::json($array);
+			->with('pattern', $pattern)
+			->with('pattern_types', $pattern_types)
+			->with('genres', $genres)
+			->with('artists', $artists)
+			->with('songs', $songs);
 	}
 
 	public function post_pattern()
 	{
 		$input = Input::all();
 
-		print_r($input);
+		//print_r($input);
 
 		if($input['pattern_id'] > 0){
 			$pattern = Pattern::find($input['pattern_id']);
-			$pattern->data = $input['data'];
-			$pattern->save();
 		} else {
 			$pattern = new Pattern;
-			$pattern->data = $input['data'];
 			$pattern->user_id = Auth::user()->id;
-			$pattern->save();
 		}
+
+		$pattern->pattern_type_id = $input['type'];
+		$pattern->data = $input['data'];
+		$pattern->song_id = $input['song'];
+		$pattern->genre_id = $input['genre'];
+		$pattern->time = $input['time'];
+		$pattern->youtube = $input['youtube'];
+		$pattern->save();
 
 		return Redirect::to_route('my_patterns');
 

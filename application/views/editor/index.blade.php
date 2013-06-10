@@ -132,10 +132,58 @@
 					    
 					    
 
-					    <textarea id='save_textarea' name="data" spellcheck='false'>{{ $data }}</textarea>
+					    <textarea id='save_textarea' name="data" spellcheck='false'>{{ $pattern->data }}</textarea>
 
 					</div>
 				</div>	
+
+				<div id="editor_info" class="form-inline">
+					<legend>Settings</legend>
+					<div class="row">
+						<div class="span3">
+							<label for="type">Type</label>
+							<select class="input-medium" name="type" id="type">
+								@foreach($pattern_types as $type)
+								<option value="{{ $type->id }}">{{ $type->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="span3">
+							<label for="genre">Genre</label>
+							<select class="input-medium" name="genre" id="genre">
+								@foreach($genres as $genre)
+								<option value="{{ $genre->id }}">{{ $genre->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="span3">						
+							<label for="artist">Artist</label>
+							<select class="input-medium" name="artist" id="artist">
+								@foreach($artists as $artist)
+								<option value="{{ $artist->id }}">{{ $artist->name }}</option>
+								@endforeach
+							</select>
+						</div>
+						<div class="span3">						
+							<label for="song">Song</label>
+							<select class="input-medium" name="song" id="song">
+								@foreach($songs as $song)
+								<option value="{{ $song->id }}">{{ $song->name }}</option>
+								@endforeach
+							</select>
+						</div>					
+					</div>
+					<div class="row">
+						<div class="span3">
+							<label for="time">Time</label>
+							<input type="text" class="input-medium" name="time" id="time" placeholder="1:23" />
+						</div>	
+						<div class="span3">
+							<label for="youtube">Youtube</label>
+							<input type="text" class="input-medium" name="youtube" id="youtube" placeholder="http://www.youtube.com/watch?v=Phfc0rPB_7k" />
+						</div>
+					</div>
+				</div>
 
 				<div class="row" id="editor_contols">
 					<div class="span12">

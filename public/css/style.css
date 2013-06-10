@@ -34,7 +34,7 @@ section.content {  }
 
 #editor table .btn-group { display: none; }
 #editor table:hover .btn-group { display: block; }
-#editor table.count { margin-left: 6px; }
+#editor table.count { color: #f59600; }
 #editor table tr td table { width: 100%; }
 #editor table tr td table td { padding: 0; border: 0; }
 #editor table tr td table td input[type="text"] { width: 20px; height: 20px; text-align: center; padding: 0; font-family: Courier; font-size: 16px; border: 0; margin: 0; box-shadow: none; -webkit-box-shadow: none; -moz-box-shadow: none;  }
@@ -69,12 +69,15 @@ td.note { width: 25px; height: 25px; }
 #editor .table td {  }
 #editor .table tr.first td { border: 0; height: 40px; vertical-align: top; }
 #editor .table > tbody > tr > td { padding: 0 4px 0 4px; }
-#editor .table > tbody > tr > td td { text-align: center; line-height: 25px; font-family: 'Courier'; font-size: 13px; }
+#editor .table > tbody > tr > td td { text-align: center; line-height: 25px; font-family: 'Courier'; font-size: 15px; }
 #editor .table > tbody > tr > td td.inactive { color: #ccc; }
-#editor .table > tbody > tr > td td:hover { cursor: pointer; background: #ccc; }
+#editor .table > tbody > tr > td td.note:hover { cursor: pointer; background: #ccc; }
 
 
 img.note { width: 35px; height: 35px; }
 img.led { width: 15px; }
 
 #editor_controls { display: none; }
+
+table.instruments { margin-top: 40px; clear: both; }
+table.instruments td { height: 24px; }
