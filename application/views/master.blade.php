@@ -54,6 +54,8 @@
 										<li><a href="{{ URL::to_route('my_patterns') }}"><i class="icon-music"></i> My patterns</a></li>
 										<li><a href="{{ URL::to_route('my_favourites') }}"><i class="icon-star"></i> My favourites</a></li>
 										<li class="divider"></li>
+										<li><a href="{{ URL::to_route('premium') }}"><i class="icon-bookmark"></i> Upgrade to premium</a></li>
+										<li class="divider"></li>
 										<li><a href="{{ URL::to_route('logout') }}"><i class="icon-off"></i> Logout</a></li>
 									</ul>
 								</li>

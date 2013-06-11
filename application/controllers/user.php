@@ -258,4 +258,11 @@ class User_Controller extends Base_Controller
 
 	}
 
+	public function get_premium()
+	{
+		$title = "Premium";
+		return View::make('user.premium')
+			->with('title', $title);
+	}	
+
 }

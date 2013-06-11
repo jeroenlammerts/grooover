@@ -42,10 +42,23 @@ class Patterns_Controller extends Base_Controller
 	    )->links();
 
 		foreach($patterns->results as $pattern){
+			
 			if($pattern->affiliate){
 				$pattern->link = $pattern->affiliate_link;
 			} else {
 				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
+			}
+
+			$pattern->favourite = false;
+			if(Auth::check()){
+				$link = $user = DB::table('favourites')
+									->where('user_id', '=', Auth::user()->id)
+									->where('pattern_id', '=', $pattern->id)
+									->get();
+
+				if(count($link)){
+					$pattern->favourite = true;
+				} 
 			}
 
 		}
@@ -82,15 +95,67 @@ class Patterns_Controller extends Base_Controller
 						->paginate(10);
 
 		foreach($patterns->results as $pattern){
+			
 			if($pattern->affiliate){
 				$pattern->link = $pattern->affiliate_link;
 			} else {
 				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
 			}
 
+			$pattern->favourite = false;
+			if(Auth::check()){
+				$link = $user = DB::table('favourites')
+									->where('user_id', '=', Auth::user()->id)
+									->where('pattern_id', '=', $pattern->id)
+									->get();
+
+				if(count($link)){
+					$pattern->favourite = true;
+				} 
+			}
+
 		}						
 
 		$title = "My patterns";
+		return View::make('user.patterns')
+			->with('title', $title)
+			->with('patterns', $patterns);
+	}
+
+	public function get_my_favourites()
+	{
+
+		$fav_array = array();
+		$favourites = DB::table('favourites')
+							->where('user_id', '=', Auth::user()->id)
+							->get();
+		foreach($favourites as $favourite){
+			$fav_array[] = $favourite->pattern_id;
+
+		}
+
+		$patterns = DB::table('patterns')
+						->left_join('genres', 'genres.id', '=', 'patterns.genre_id')
+						->left_join('pattern_types', 'pattern_types.id', '=', 'patterns.pattern_type_id')
+						->select(array('patterns.id', 'patterns.title', 'genres.name as genre', 'time', 'pattern_types.name as type', 'patterns.youtube as youtube', 'patterns.affiliate', 'patterns.affiliate_link'))
+						->where('patterns.user_id', '=', Auth::user()->id)
+						->where_in('patterns.id', $fav_array)
+						->order_by('patterns.title', 'asc')
+						->paginate(10);
+
+		foreach($patterns->results as $pattern){
+			
+			if($pattern->affiliate){
+				$pattern->link = $pattern->affiliate_link;
+			} else {
+				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
+			}
+
+			$pattern->favourite = true;
+
+		}						
+
+		$title = "My favourites";
 		return View::make('user.patterns')
 			->with('title', $title)
 			->with('patterns', $patterns);
@@ -172,11 +237,21 @@ class Patterns_Controller extends Base_Controller
 		$input = Input::all();
 		if(isset($input['pattern_id'])){
 
-			$favourite = new Favourite;
-			$favourite->user_id = Auth::user()->id;
-			$favourite->pattern_id = $input['pattern_id'];
-			$favourite->save();
+			$link = $user = DB::table('favourites')
+								->where('user_id', '=', Auth::user()->id)
+								->where('pattern_id', '=', $input['pattern_id'])
+								->get();
 
+			if(count($link)){
+				DB::table('favourites')
+					->where('user_id', '=', Auth::user()->id)
+					->where('pattern_id', '=', $input['pattern_id'])
+					->delete();
+			} else {
+				DB::table('favourites')->insert(array('user_id' => Auth::user()->id, 'pattern_id' => $input['pattern_id']));
+				echo 'active';
+			}
+			
 		}
 
 	}

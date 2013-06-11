@@ -49,7 +49,8 @@ Route::get('forgot-password', array('as' => 'forgot_password', 'uses' => 'user@f
 // user account
 Route::get('profile', array('as' => 'profile', 'uses' => 'user@profile'));
 Route::get('my-patterns', array('as' => 'my_patterns', 'uses' => 'patterns@my_patterns'));
-Route::get('my-favourites', array('as' => 'my_favourites', 'uses' => 'patterns@my_patterns'));
+Route::get('my-favourites', array('as' => 'my_favourites', 'uses' => 'patterns@my_favourites'));
+Route::get('premium', array('as' => 'premium', 'uses' => 'user@premium'));
 
 // post forms
 Route::post('login', 'user@index');

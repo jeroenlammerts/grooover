@@ -7,6 +7,8 @@ $(document).ready(function(){
 	$('.add_to_favourite').click(function(e){
 		e.preventDefault();
 
+		var link = $(this);
+
 		var pattern_id = $(this).parent().parent().parent().attr('id').replace('pattern_', '');
 
 		$.ajax({
@@ -14,7 +16,11 @@ $(document).ready(function(){
 			type: 'POST',
 			data: { pattern_id: pattern_id },
 			success: function(data){
-				console.log(data);
+				if(data == 'active'){
+					link.addClass('active');
+				} else {
+					link.removeClass('active');
+				}
 			}
 		});
 

@@ -28,7 +28,7 @@
 					<td>
 						@if(!$pattern->affiliate)
 						<div class="btn-group">
-							<a href="#" class="btn add_to_favourite" title="Add to my favourites"><i class="icon-star"></i></a>
+							<a href="#" class="btn add_to_favourite@if($pattern->favourite) active@endif" title="Add to my favourites"><i class="icon-star"></i></a>
 							<a href="#" class="btn thumb_up"><i class="icon-thumbs-up"></i></a>
 							<a href="#" class="btn thumb_down"><i class="icon-thumbs-down"></i></a>
 						</div>
