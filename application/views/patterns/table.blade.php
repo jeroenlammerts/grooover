@@ -12,7 +12,7 @@
 			<tbody>
 				@foreach($patterns->results as $pattern)
 				<tr>
-					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->artist }} - {{ $pattern->song }}</a></td>
+					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->title }}</a></td>
 					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->time }}</a></td>
 					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->type }}</a></td>
 					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->genre }}</a></td>
@@ -23,7 +23,7 @@
 						<i class="icon-star-empty"></i>
 						<i class="icon-star-empty"></i>
 					</td>
-					<td><i class="icon-facetime-video"></i></td>
+					<td>@if(trim($pattern->youtube) != '')<i class="icon-facetime-video"></i>@endif</td>
 				</tr>	
 				@endforeach							
 			</tbody>

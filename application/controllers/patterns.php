@@ -40,13 +40,14 @@ class Patterns_Controller extends Base_Controller
 
 		$patterns = DB::table('patterns')
 						->left_join('songs', 'songs.id', '=', 'patterns.song_id')
-						->left_join('artists', 'songs.artist_id', '=', 'artists.id')
+						//->left_join('artists', 'songs.artist_id', '=', 'artists.id')
 						->left_join('genres', 'genres.id', '=', 'patterns.genre_id')
 						->left_join('pattern_types', 'pattern_types.id', '=', 'patterns.pattern_type_id')
-						->select(array('patterns.id', 'songs.name as song', 'artists.name as artist', 'genres.name as genre', 'time', 'pattern_types.name as type'))
+						//->select(array('patterns.id', 'songs.name as song', 'artists.name as artist', 'genres.name as genre', 'time', 'pattern_types.name as type'))
+						->select(array('patterns.id', 'patterns.title', 'genres.name as genre', 'time', 'pattern_types.name as type', 'patterns.youtube as youtube'))
 						->where('patterns.user_id', '=', Auth::user()->id)
-						->order_by('artists.name', 'asc')
-						->order_by('songs.name', 'asc')
+						->order_by('patterns.title', 'asc')
+						//->order_by('songs.name', 'asc')
 						->paginate(10);
 
 		$title = "My patterns";
@@ -60,12 +61,26 @@ class Patterns_Controller extends Base_Controller
 
 		if($pattern_id){
 			$pattern = Pattern::find($pattern_id);
-		}	
+		} else {
+			$pattern = new Pattern;
+			$pattern->data = '{
+				"kitIndex":0,
+				"effectIndex":0,
+				"tempo":176,
+				"swingFactor":0,
+				"effectMix":1,
+				"rhythms": [
+					[],[]
+				],
+				"isKitLoaded":true,
+				"isEffectLoaded":true
+			}';
+		}
 		
 		$pattern_types = DB::table('pattern_types')->order_by('name', 'asc')->get();
 		$genres = DB::table('genres')->order_by('name', 'asc')->get();
-		$artists = DB::table('artists')->order_by('name', 'asc')->get();
-		$songs = DB::table('songs')->order_by('name', 'asc')->get();		
+		//$artists = DB::table('artists')->order_by('name', 'asc')->get();
+		//$songs = DB::table('songs')->order_by('name', 'asc')->get();		
 
 		$title = "Editor";
 		return View::make('editor.index')
@@ -73,9 +88,9 @@ class Patterns_Controller extends Base_Controller
 			->with('pattern_id', $pattern_id)
 			->with('pattern', $pattern)
 			->with('pattern_types', $pattern_types)
-			->with('genres', $genres)
-			->with('artists', $artists)
-			->with('songs', $songs);
+			->with('genres', $genres);
+			//->with('artists', $artists)
+			//->with('songs', $songs);
 	}
 
 	public function post_pattern()
@@ -93,10 +108,12 @@ class Patterns_Controller extends Base_Controller
 
 		$pattern->pattern_type_id = $input['type'];
 		$pattern->data = $input['data'];
-		$pattern->song_id = $input['song'];
+		//$pattern->song_id = $input['song'];
 		$pattern->genre_id = $input['genre'];
 		$pattern->time = $input['time'];
 		$pattern->youtube = $input['youtube'];
+		$pattern->public = $input['public'];
+		$pattern->title = $input['title'];
 		$pattern->save();
 
 		return Redirect::to_route('my_patterns');

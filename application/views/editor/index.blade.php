@@ -141,10 +141,18 @@
 					<legend>Settings</legend>
 					<div class="row">
 						<div class="span3">
+							<label for="youtube">Youtube</label>
+							<input type="text" class="input-medium" name="youtube" id="youtube" placeholder="http://www.youtube.com/watch?v=Phfc0rPB_7k" value="{{ $pattern->youtube }}" />
+						</div>						
+						<div class="span3">
+							<label for="title">Title</label>
+							<input type="text" class="input-medium" name="title" id="title" placeholder="" value="{{ $pattern->title }}" />
+						</div>
+						<div class="span3">
 							<label for="type">Type</label>
 							<select class="input-medium" name="type" id="type">
 								@foreach($pattern_types as $type)
-								<option value="{{ $type->id }}">{{ $type->name }}</option>
+								<option value="{{ $type->id }}"@if($type->id == $pattern->pattern_type_id) selected="selected"@endif>{{ $type->name }}</option>
 								@endforeach
 							</select>
 						</div>
@@ -152,39 +160,32 @@
 							<label for="genre">Genre</label>
 							<select class="input-medium" name="genre" id="genre">
 								@foreach($genres as $genre)
-								<option value="{{ $genre->id }}">{{ $genre->name }}</option>
+								<option value="{{ $genre->id }}"@if($genre->id == $pattern->genre_id) selected="selected"@endif>{{ $genre->name }}</option>
 								@endforeach
 							</select>
-						</div>
-						<div class="span3">						
-							<label for="artist">Artist</label>
-							<select class="input-medium" name="artist" id="artist">
-								@foreach($artists as $artist)
-								<option value="{{ $artist->id }}">{{ $artist->name }}</option>
-								@endforeach
-							</select>
-						</div>
-						<div class="span3">						
-							<label for="song">Song</label>
-							<select class="input-medium" name="song" id="song">
-								@foreach($songs as $song)
-								<option value="{{ $song->id }}">{{ $song->name }}</option>
-								@endforeach
-							</select>
-						</div>					
+						</div>				
 					</div>
 					<div class="row">
 						<div class="span3">
 							<label for="time">Time</label>
-							<input type="text" class="input-medium" name="time" id="time" placeholder="1:23" />
+							<input type="text" class="input-medium" name="time" id="time" placeholder="1:23" value="{{ date('H:i:s', strtotime($pattern->time)) }}" />
 						</div>	
 						<div class="span3">
-							<label for="youtube">Youtube</label>
-							<input type="text" class="input-medium" name="youtube" id="youtube" placeholder="http://www.youtube.com/watch?v=Phfc0rPB_7k" />
+							<label for="public">Visibility</label>
+							<select class="input-medium" name="public" id="public">
+								<option value="1"@if($pattern->public) selected="selected"@endif>Public</option>
+								<option value="0"@if(!$pattern->public) selected="selected"@endif>Private</option>
+							</select>
 						</div>
 					</div>
 				</div>
 
+				<div id="video_container"@if(trim($pattern->youtube) != '') class="visible"@endif>
+					<legend>Video</legend>
+					<iframe id="video_frame" width="400" height="300" src="http://www.youtube.com/embed/{{ $pattern->youtube }}?start={{ strtotime('1970-01-01 ' . $pattern->time . 'GMT') }}" frameborder="0" allowfullscreen></iframe>
+				</div>
+
+				<legend>Pattern</legend>
 				<div class="row" id="editor_contols">
 					<div class="span12">
 						<div class="btn-toolbar" id="editor_controls">

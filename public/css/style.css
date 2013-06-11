@@ -81,3 +81,6 @@ img.led { width: 15px; }
 
 table.instruments { margin-top: 40px; clear: both; }
 table.instruments td { height: 24px; }
+
+#video_container { display: none; }
+#video_container.visible { display: block; }
