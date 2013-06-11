@@ -1,3 +1,4 @@
+		@if(count($patterns->results))
 		<table class="table table-hover table-striped">
 			<thead>
 				<tr>
@@ -6,16 +7,16 @@
 					<th>Type</th>
 					<th>Genre</th>
 					<th>Score</th>
-					<th>&nbsp;</th>
+					<th>Video</th>
 				</tr>
 			</thead>
 			<tbody>
 				@foreach($patterns->results as $pattern)
-				<tr>
-					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->title }}</a></td>
-					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->time }}</a></td>
-					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->type }}</a></td>
-					<td><a href="{{ URL::to_route('pattern_detail', array($pattern->id)) }}">{{ $pattern->genre }}</a></td>
+				<tr id="pattern_{{ $pattern->id }}"@if($pattern->affiliate) class="affiliate"@endif>
+					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->title }}</a></td>
+					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->time }}</a></td>
+					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->type }}</a></td>
+					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->genre }}</a></td>
 					<td>
 						<i class="icon-star"></i>
 						<i class="icon-star"></i>
@@ -24,6 +25,15 @@
 						<i class="icon-star-empty"></i>
 					</td>
 					<td>@if(trim($pattern->youtube) != '')<i class="icon-facetime-video"></i>@endif</td>
+					<td>
+						@if(!$pattern->affiliate)
+						<div class="btn-group">
+							<a href="#" class="btn add_to_favourite" title="Add to my favourites"><i class="icon-star"></i></a>
+							<a href="#" class="btn thumb_up"><i class="icon-thumbs-up"></i></a>
+							<a href="#" class="btn thumb_down"><i class="icon-thumbs-down"></i></a>
+						</div>
+						@endif
+					</td>
 				</tr>	
 				@endforeach							
 			</tbody>
@@ -31,3 +41,6 @@
 		<div class="pagination">
 			{{ $patterns->links() }}
 		</div>
+		@else
+		No patterns found
+		@endif

@@ -19,9 +19,12 @@
 	<header>
 		<div class="container">
 			<div class="row">
-				<div class="span12">
+				<div class="span8">
 					<a href="{{ URL::to_route('home') }}"><h1>Grooover <span>grooves, fills, breaks</span></h1></a>
 				</div>
+				<div class="span4">
+					<img src="img/ad3.jpg" alt="" id="top_ad" />
+				</div>				
 			</div>
 			<div class="row">
 				<div class="span12">
@@ -30,15 +33,19 @@
 							<ul class="nav">
 								<li{{ Request::route()->is('home') ? ' class="active"' : '' }}><a href="{{ URL::to_route('home') }}">Home</a></li>
 								<li{{ Request::route()->is('patterns') ? ' class="active"' : '' }}><a href="{{ URL::to_route('patterns') }}">Patterns</a></li>
+								@if(Auth::user())
 								<li{{ Request::route()->is('editor') ? ' class="active"' : '' }}><a href="{{ URL::to_route('editor') }}">Editor</a></li>
+								@endif
 								<li{{ Request::route()->is('about') ? ' class="active"' : '' }}><a href="{{ URL::to_route('about') }}">About</a></li>
 							</ul>
-							<form class="navbar-search">
+
+							{{ Form::open('patterns', 'GET', array('class' => 'navbar-search')) }}
 								<div class="input-append">
-								  <input class="span2" id="appendedInputButton" type="text" placeholder="Search">
-								  <button class="btn" type="button"><i class="icon-search"></i></button>
+								  <input class="span2" id="appendedInputButton" type="text" placeholder="Search" name="keyword">
+								  <button class="btn" type="submit"><i class="icon-search"></i></button>
 								</div>
-							</form>
+							{{ Form::close() }}
+
 							@if(Auth::user())
 							<ul class="nav pull-right">
 								<li class="dropdown"><a href="#" class="dropdown-toggle" data-toggle="dropdown">Welcome, {{ Auth::user()->first_name }} <b class="caret"></b></a>

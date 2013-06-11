@@ -84,3 +84,9 @@ table.instruments td { height: 24px; }
 
 #video_container { display: none; }
 #video_container.visible { display: block; }
+
+.search_filter label { width: 60px; }
+.search_filter input, .search_filter select { margin-right: 15px; }
+
+.affiliate a { color: #ff0000; }
+#top_ad { margin-top: 15px; }

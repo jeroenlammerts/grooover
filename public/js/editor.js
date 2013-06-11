@@ -39,6 +39,11 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 var kitInstruments = [
     {
+        'name':'Crash',
+        'values' : ['x', 'X', 'S', 'C'],
+        'valueNames' : ['Crash', 'Accented Crash', 'Splash', 'China']
+    },
+    {
         'name':'Tom 1',
         'values' : ['o', 'O'],
         'valueNames' : ['Note', 'Accented note']
@@ -53,11 +58,6 @@ var kitInstruments = [
         'values' : ['o', 'O'],
         'valueNames' : ['Note', 'Accented note']
     },
-    /*{
-        'name':'Crash',
-        'values' : ['x', 'X', 'S', 'C'],
-        'valueNames' : ['Crash', 'Accented Crash', 'Splash', 'China']
-    },*/
     {
         'name':'Hihat',
         'values' : ['x', 'X', 'o', 'O'],
@@ -75,76 +75,18 @@ var kitInstruments = [
         'valueNames' : ['Note', 'Accented note']
     }
 ];
-/*
-var beats = [
-    {
-        'name':'Crash',
-        'values' : ['x', 'X', 'S', 'C']
-    }
-];*/
 
 var measures = 4;
 var counts = 4;
 var countTime = 4;
-//var totalNotes = measures*counts*countTime;
 var totalNotes;
 
 $(document).ready(function(){
     
     if($('#editor').length){
-    
-        var html;
-        
-        /*$.each(kitInstruments, function(i, values) {
-            html = '<tr><td>'+kitInstruments[i]['name']+'</td></tr>';
-            
-            var contentValues = '<table class="table table-condensed">';
-            $.each(kitInstruments[i]['values'], function(j, item){
-                contentValues += '<tr><td>' + item + '</td><td class="description">' + kitInstruments[i]['valueNames'][j] + '</tr>';
-            });
-            contentValues += '</table>';
-            
-            $(html).insertBefore('#editor_instruments table tr:last').popover({
-                html : true,
-                trigger : 'hover',
-                placement: 'right',
-                title: 'Legenda',
-                content: contentValues
-            });
-        });*/
-
         $('#editor').bind("contextmenu", function () {
             return false;
-        });
-        
-        /*$('#editor img').mousedown(function(){
-            event.preventDefault();
-            switch (event.which) {
-                // left mouse button
-                case 1:
-                    var index = $(this).parents('tr:eq(1)').index() - 1;
-                    if(!$(this).val()){
-                        $(this).val(kitInstruments[index]['values'][0]);
-                    } else {
-                        var newVal = '';
-                        var value = $(this).val();
-                        $.each(kitInstruments[index]['values'], function(i, item){
-                            if(item == value){
-                                if(kitInstruments[index]['values'].length > i){
-                                    newVal = kitInstruments[index]['values'][i+1];
-                                }
-                            }
-                        });
-                        $(this).val(newVal);
-                    }
-                    break;
-                // right mouse button
-                case 3:
-                    $(this).val('');
-                    break;
-            }
-        });*/
-        
+        });       
     }
 
     var youtubeVideo = '';
@@ -185,14 +127,7 @@ $(document).ready(function(){
 
     });
 
-
-
-
 });
-
-
-
-
 
 // Events
 // init() once the page has finished loading.
@@ -254,6 +189,7 @@ function cloneBeat(source) {
     beat.tom1PitchVal = source.tom1PitchVal;
     beat.tom2PitchVal = source.tom2PitchVal;
     beat.tom3PitchVal = source.tom3PitchVal;
+    beat.crashPitchVal = source.crashPitchVal;
     beat.rhythm1 = source.rhythm1.slice(0);        // slice(0) is an easy way to copy the full array
     beat.rhythm2 = source.rhythm2.slice(0);
     beat.rhythm3 = source.rhythm3.slice(0);
@@ -272,7 +208,7 @@ function cloneBeat(source) {
 // ... it is saved/loaded via JSON
 var theBeat = cloneBeat(beatReset);
 
-kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = 0;
+kickPitch = snarePitch = hihatPitch = tom1Pitch = tom2Pitch = tom3Pitch = crashPitch = 0;
 
 var mouseCapture = null;
 var mouseCaptureOffset = 0;
@@ -383,6 +319,7 @@ Kit.prototype.load = function() {
     var tom2Path = pathName + "tom2.wav";
     var tom3Path = pathName + "tom3.wav";
     var openHihatPath = pathName + "open_hihat.wav";
+    var crashPath = pathName + "crash.wav";
 
     this.loadSample(0, kickPath, false);
     this.loadSample(1, snarePath, false);
@@ -391,6 +328,7 @@ Kit.prototype.load = function() {
     this.loadSample(4, tom2Path, false);
     this.loadSample(5, tom3Path, false);
     this.loadSample(6, openHihatPath, true);
+    this.loadSample(7, crashPath, false);
 }
 
 Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
@@ -412,6 +350,7 @@ Kit.prototype.loadSample = function(sampleID, url, mixToMono) {
             case 4: kit.tom2 = buffer; break;
             case 5: kit.tom3 = buffer; break;
             case 6: kit.openHihat = buffer; break;
+            case 7: kit.crash = buffer; break;
         }
 
         kit.instrumentLoadCount++;
@@ -1153,9 +1092,9 @@ function schedule() {
         if($.isArray(theBeat.rhythms[playingMeasure])){
 
             // kick
-            if ($.isArray(theBeat.rhythms[playingMeasure][5]) && $.isArray(theBeat.rhythms[playingMeasure][5][playingCount]) && theBeat.rhythms[playingMeasure][5][playingCount][playingNote]) {
+            if ($.isArray(theBeat.rhythms[playingMeasure][6]) && $.isArray(theBeat.rhythms[playingMeasure][6][playingCount]) && theBeat.rhythms[playingMeasure][6][playingCount][playingNote]) {
                 
-                var noteKey = theBeat.rhythms[playingMeasure][5][playingCount][playingNote];
+                var noteKey = theBeat.rhythms[playingMeasure][6][playingCount][playingNote];
                 switch(noteKey){
                     case 'o': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[2] * 1.0, kickPitch, contextPlayTime); break;
                     case 'O': playNote(currentKit.kickBuffer, false, 0,0,-2, 0.5, volumes[3] * 1.0, kickPitch, contextPlayTime); break;
@@ -1164,9 +1103,9 @@ function schedule() {
             }
 
             // Snare
-            if ($.isArray(theBeat.rhythms[playingMeasure][4]) && $.isArray(theBeat.rhythms[playingMeasure][4][playingCount]) && theBeat.rhythms[playingMeasure][4][playingCount][playingNote]) {
+            if ($.isArray(theBeat.rhythms[playingMeasure][5]) && $.isArray(theBeat.rhythms[playingMeasure][5][playingCount]) && theBeat.rhythms[playingMeasure][5][playingCount][playingNote]) {
                 
-                var noteKey = theBeat.rhythms[playingMeasure][4][playingCount][playingNote];
+                var noteKey = theBeat.rhythms[playingMeasure][5][playingCount][playingNote];
                 switch(noteKey){
                     case 'o': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[2] * 0.6, snarePitch, contextPlayTime); break;
                     case 'O': playNote(currentKit.snareBuffer, false, 0,0,-2, 1, volumes[3] * 0.6, snarePitch, contextPlayTime); break;
@@ -1176,9 +1115,9 @@ function schedule() {
             }
 
             // Hihat
-            if ($.isArray(theBeat.rhythms[playingMeasure][3]) && $.isArray(theBeat.rhythms[playingMeasure][3][playingCount]) && theBeat.rhythms[playingMeasure][3][playingCount][playingNote]) {
+            if ($.isArray(theBeat.rhythms[playingMeasure][4]) && $.isArray(theBeat.rhythms[playingMeasure][4][playingCount]) && theBeat.rhythms[playingMeasure][4][playingCount][playingNote]) {
 
-                var noteKey = theBeat.rhythms[playingMeasure][3][playingCount][playingNote];
+                var noteKey = theBeat.rhythms[playingMeasure][4][playingCount][playingNote];
                 switch(noteKey){
                     case 'x': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[2] * 0.7, hihatPitch, contextPlayTime); break;
                     case 'X': playNote(currentKit.hihatBuffer, true, -0.2, 0, -1.0, 1, volumes[3] * 0.7, hihatPitch, contextPlayTime); break;
@@ -1189,16 +1128,40 @@ function schedule() {
             }
 
             // Toms    
+            if ($.isArray(theBeat.rhythms[playingMeasure][3]) && $.isArray(theBeat.rhythms[playingMeasure][3][playingCount]) && theBeat.rhythms[playingMeasure][3][playingCount][playingNote]) {
+                
+                var noteKey = theBeat.rhythms[playingMeasure][3][playingCount][playingNote];
+                switch(noteKey){                
+                    case 'o': playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[2] * 0.6, tom1Pitch, contextPlayTime); break;
+                }
+            
+            }
+
             if ($.isArray(theBeat.rhythms[playingMeasure][2]) && $.isArray(theBeat.rhythms[playingMeasure][2][playingCount]) && theBeat.rhythms[playingMeasure][2][playingCount][playingNote]) {
-                playNote(currentKit.tom1, false, 0,0,-2, 1, volumes[2] * 0.6, tom1Pitch, contextPlayTime);
+                
+                var noteKey = theBeat.rhythms[playingMeasure][2][playingCount][playingNote];
+                switch(noteKey){                
+                    case 'o': playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[2] * 0.6, tom2Pitch, contextPlayTime); break;
+                }
+
             }
 
             if ($.isArray(theBeat.rhythms[playingMeasure][1]) && $.isArray(theBeat.rhythms[playingMeasure][1][playingCount]) && theBeat.rhythms[playingMeasure][1][playingCount][playingNote]) {
-                playNote(currentKit.tom2, false, 0,0,-2, 1, volumes[2] * 0.6, tom2Pitch, contextPlayTime);
+                
+                var noteKey = theBeat.rhythms[playingMeasure][1][playingCount][playingNote];
+                switch(noteKey){                
+                    case 'o': playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[2] * 0.6, tom3Pitch, contextPlayTime); break;
+                }
             }
 
             if ($.isArray(theBeat.rhythms[playingMeasure][0]) && $.isArray(theBeat.rhythms[playingMeasure][0][playingCount]) && theBeat.rhythms[playingMeasure][0][playingCount][playingNote]) {
-                playNote(currentKit.tom3, false, 0,0,-2, 1, volumes[2] * 0.6, tom3Pitch, contextPlayTime);
+                
+                var noteKey = theBeat.rhythms[playingMeasure][0][playingCount][playingNote];
+                switch(noteKey){                
+                    case 'x': playNote(currentKit.crash, false, 0,0,-2, 1, volumes[2] * 0.6, crashPitch, contextPlayTime); break;
+                    case 'X': playNote(currentKit.crash, false, 0,0,-2, 1, volumes[3] * 0.6, crashPitch, contextPlayTime); break;
+                }
+
             }
 
         }

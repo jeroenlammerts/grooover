@@ -152,7 +152,7 @@
 							<label for="type">Type</label>
 							<select class="input-medium" name="type" id="type">
 								@foreach($pattern_types as $type)
-								<option value="{{ $type->id }}"@if($type->id == $pattern->pattern_type_id) selected="selected"@endif>{{ $type->name }}</option>
+								<option value="{{ $type->id }}"@if($type->id == $pattern->pattern_type_id || (!$pattern->id && $type->id == 2)) selected="selected"@endif>{{ $type->name }}</option>
 								@endforeach
 							</select>
 						</div>
@@ -160,7 +160,7 @@
 							<label for="genre">Genre</label>
 							<select class="input-medium" name="genre" id="genre">
 								@foreach($genres as $genre)
-								<option value="{{ $genre->id }}"@if($genre->id == $pattern->genre_id) selected="selected"@endif>{{ $genre->name }}</option>
+								<option value="{{ $genre->id }}"@if($genre->id == $pattern->genre_id || (!$pattern->id && $genre->id == 1)) selected="selected"@endif>{{ $genre->name }}</option>
 								@endforeach
 							</select>
 						</div>				
@@ -173,8 +173,8 @@
 						<div class="span3">
 							<label for="public">Visibility</label>
 							<select class="input-medium" name="public" id="public">
-								<option value="1"@if($pattern->public) selected="selected"@endif>Public</option>
-								<option value="0"@if(!$pattern->public) selected="selected"@endif>Private</option>
+								<option value="1"@if($pattern->public || !$pattern->id) selected="selected"@endif>Public</option>
+								<option value="0"@if(!$pattern->public && $pattern->id) selected="selected"@endif>Private</option>
 							</select>
 						</div>
 					</div>

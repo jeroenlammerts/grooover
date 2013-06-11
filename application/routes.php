@@ -57,6 +57,10 @@ Route::post('register', 'user@register');
 Route::post('forgot_password', 'user@forgot_pass');
 Route::post('profile', 'user@profile');
 Route::post('pattern', 'patterns@pattern');
+Route::post('search_patterns', 'patterns@search_patterns');
+
+// ajax
+Route::post('add_to_favourite', 'patterns@add_to_favourite');
 
 /*
 |--------------------------------------------------------------------------

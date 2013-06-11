@@ -7,18 +7,48 @@ class Patterns_Controller extends Base_Controller
 	public function get_index()
 	{
 		
+		$input = Input::all();
+
 		$patterns = DB::table('patterns')
-						->left_join('songs', 'songs.id', '=', 'patterns.song_id')
-						->left_join('artists', 'songs.artist_id', '=', 'artists.id')
+						//->left_join('songs', 'songs.id', '=', 'patterns.song_id')
+						//->left_join('artists', 'songs.artist_id', '=', 'artists.id')
 						->left_join('genres', 'genres.id', '=', 'patterns.genre_id')
 						->left_join('pattern_types', 'pattern_types.id', '=', 'patterns.pattern_type_id')
-						->select(array('patterns.id', 'songs.name as song', 'artists.name as artist', 'genres.name as genre', 'time', 'pattern_types.name as type'))
-						->order_by('artists.name', 'asc')
-						->order_by('songs.name', 'asc')
-						->paginate(10);
+						//->select(array('patterns.id', 'songs.name as song', 'artists.name as artist', 'genres.name as genre', 'time', 'pattern_types.name as type'))
+						->select(array('patterns.id', 'patterns.title', 'genres.name as genre', 'time', 'pattern_types.name as type', 'patterns.youtube as youtube', 'patterns.affiliate', 'patterns.affiliate_link'));
+						//->order_by('artists.name', 'asc')
+						//->order_by('songs.name', 'asc')
+						
 
-		/*$patterns = Pattern::with('song')->order_by('id', 'asc')->paginate(5);
-		$patterns = Paginator::make($patterns, count($patterns), 5);*/
+		if(isset($input['type']) && $input['type'] != ''){
+			$patterns = $patterns->where('patterns.pattern_type_id', '=', $input['type']);
+		}
+		if(isset($input['genre']) && $input['genre'] != ''){
+			$patterns = $patterns->where('patterns.genre_id', '=', $input['genre']);
+		}
+		if(isset($input['keyword']) && $input['keyword'] != ''){
+			$patterns = $patterns->where('patterns.title', 'LIKE', '%'.$input['keyword'].'%');
+		}
+
+		$patterns = $patterns->order_by('patterns.title', 'asc')->paginate(10);
+
+
+		$pagination = $patterns->appends(
+	        array(
+	            'type'   	=> Input::get('type'),
+	            'genre' 	=> Input::get('genre'),
+	            'keyword'   => Input::get('keyword')
+	        )
+	    )->links();
+
+		foreach($patterns->results as $pattern){
+			if($pattern->affiliate){
+				$pattern->link = $pattern->affiliate_link;
+			} else {
+				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
+			}
+
+		}
 
 		$pattern_types = DB::table('pattern_types')->order_by('name', 'asc')->get();
 		$genres = DB::table('genres')->order_by('name', 'asc')->get();
@@ -32,23 +62,33 @@ class Patterns_Controller extends Base_Controller
 			->with('pattern_types', $pattern_types)
 			->with('genres', $genres)
 			->with('artists', $artists)
-			->with('songs', $songs);
+			->with('songs', $songs)
+			->with('input', $input);
 	}
 
 	public function get_my_patterns()
 	{
 
 		$patterns = DB::table('patterns')
-						->left_join('songs', 'songs.id', '=', 'patterns.song_id')
+						//->left_join('songs', 'songs.id', '=', 'patterns.song_id')
 						//->left_join('artists', 'songs.artist_id', '=', 'artists.id')
 						->left_join('genres', 'genres.id', '=', 'patterns.genre_id')
 						->left_join('pattern_types', 'pattern_types.id', '=', 'patterns.pattern_type_id')
 						//->select(array('patterns.id', 'songs.name as song', 'artists.name as artist', 'genres.name as genre', 'time', 'pattern_types.name as type'))
-						->select(array('patterns.id', 'patterns.title', 'genres.name as genre', 'time', 'pattern_types.name as type', 'patterns.youtube as youtube'))
+						->select(array('patterns.id', 'patterns.title', 'genres.name as genre', 'time', 'pattern_types.name as type', 'patterns.youtube as youtube', 'patterns.affiliate', 'patterns.affiliate_link'))
 						->where('patterns.user_id', '=', Auth::user()->id)
 						->order_by('patterns.title', 'asc')
 						//->order_by('songs.name', 'asc')
 						->paginate(10);
+
+		foreach($patterns->results as $pattern){
+			if($pattern->affiliate){
+				$pattern->link = $pattern->affiliate_link;
+			} else {
+				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
+			}
+
+		}						
 
 		$title = "My patterns";
 		return View::make('user.patterns')
@@ -66,7 +106,7 @@ class Patterns_Controller extends Base_Controller
 			$pattern->data = '{
 				"kitIndex":0,
 				"effectIndex":0,
-				"tempo":176,
+				"tempo":120,
 				"swingFactor":0,
 				"effectMix":1,
 				"rhythms": [
@@ -96,7 +136,6 @@ class Patterns_Controller extends Base_Controller
 	public function post_pattern()
 	{
 		$input = Input::all();
-
 		//print_r($input);
 
 		if($input['pattern_id'] > 0){
@@ -126,6 +165,20 @@ class Patterns_Controller extends Base_Controller
 		return View::make('patterns.detail')
 			->with('title', $title)
 			->with('pattern_id', $pattern_id);
+	}
+
+	public function post_add_to_favourite()
+	{
+		$input = Input::all();
+		if(isset($input['pattern_id'])){
+
+			$favourite = new Favourite;
+			$favourite->user_id = Auth::user()->id;
+			$favourite->pattern_id = $input['pattern_id'];
+			$favourite->save();
+
+		}
+
 	}
 
 }
