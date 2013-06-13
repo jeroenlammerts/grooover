@@ -19,7 +19,7 @@
 		</p>
 	</div>
 	<div class="span6">
-		<iframe width="570" height="400" src="http://www.youtube.com/embed/Phfc0rPB_7k" frameborder="0" allowfullscreen></iframe>
+		<iframe width="570" height="400" src="http://www.youtube.com/embed/zkkdbZpI87s" frameborder="0" allowfullscreen></iframe>
 	</div>
 </div>
 <div class="row">
@@ -29,7 +29,7 @@
 		@include('patterns.table')
 	</div>	
 	<div class="span6">
-		<h4>Popular</h4>
+		<h4>Most popular</h4>
 		<?php $patterns = $popular_patterns; ?>
 		@include('patterns.table')
 	</div>			

@@ -89,7 +89,7 @@ table.instruments td { height: 24px; }
 .search_filter input, .search_filter select { margin-right: 15px; }
 
 .affiliate a { color: #ff0000; }
-#top_ad { margin-top: 15px; }
+#top_ad { margin-top: 15px; float: right; }
 
 .table.pattern_info th, .table.pattern_info td { border: 0; padding: 8px 8px 8px 0; }
 .faq p { display: none; }
@@ -97,3 +97,5 @@ table.instruments td { height: 24px; }
 #help iframe { margin-bottom: 20px; }
 
 th.rating { min-width: 86px; }
+
+img.ad { margin-bottom: 15px; }

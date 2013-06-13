@@ -10,7 +10,7 @@ class Pattern extends Eloquent
 			return 5;
 		} else {
 			// must done a better calculation
-			$favourites = DB::table('favourites')->where('pattern_id', '=', $this->id);
+			$favourites = DB::table('favourites')->where('pattern_id', '=', $this->id)->get();
 			return min(5, count($favourites));
 		}
 	}

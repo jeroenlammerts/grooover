@@ -215,11 +215,9 @@
 							<tr>
 								<th>Score</th>
 								<td>
-									<i class="icon-star"></i>
-									<i class="icon-star"></i>
-									<i class="icon-star"></i>
-									<i class="icon-star-empty"></i>
-									<i class="icon-star-empty"></i>								
+									@for ($i = 1; $i <= 5; $i++)
+										<i class="icon-star@if($pattern->score < $i)-empty@endif"></i>
+									@endfor	
 								</td>
 							</tr>
 						</table>

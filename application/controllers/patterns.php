@@ -200,6 +200,7 @@ class Patterns_Controller extends Base_Controller
 			} 
 		}
 
+		$pattern->score = $pattern->get_score();
 	
 		$pattern_types = DB::table('pattern_types')->order_by('name', 'asc')->get();
 		$genres = DB::table('genres')->order_by('name', 'asc')->get();

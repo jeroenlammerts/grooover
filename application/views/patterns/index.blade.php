@@ -48,9 +48,9 @@
 		</div>		
 	</div>
 	<div class="span2">
-		<img src="/img/ad1.jpg" alt=""/>
-		<img src="/img/ad2.jpg" alt=""/>
-		<img src="/img/ad4.jpg" alt=""/>
+		<img src="/img/ad1.jpg" alt="" class="ad" />
+		<img src="/img/ad2.jpg" alt="" class="ad" />
+		<img src="/img/ad4.jpg" alt="" class="ad" />
 	</div>
 </div>
 

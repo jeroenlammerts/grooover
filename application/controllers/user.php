@@ -168,28 +168,6 @@ class User_Controller extends Base_Controller
 			    echo 'Mailer error: ' . $e->getMessage();
 			}
 
-			/*$mailer = IoC::resolve('phpmailer');
-			try {
-
-				$data = array(
-					'subject' => 'Activation',
-					'activation_code' => $activation_code
-				);
-
-				$mailer->Subject = $data['subject'];
-				$mailer->Body = View::make('email.activate')
-					->with('subject', $data['subject'])
-					->with('activation_code', $data['activation_code'])
-					->render();
-				$mailer->AddAddress($user->email, $user->first_name . ' ' . $user->last_name);
-				if(!$mailer->Send()) {
-					echo $error = 'Mail error: '.$mail->ErrorInfo; 
-				}
-			} catch (Exception $e) {
-			    echo 'Message was not sent.';
-			    echo 'Mailer error: ' . $e->getMessage();
-			}*/
-
 			return Redirect::to_route('login');
 		}
 	}
@@ -223,17 +201,23 @@ class User_Controller extends Base_Controller
 		} else {
 
 			$user = Auth::user();
-			$user->first_name = $input['first_name'];
-			$user->last_name = $input['last_name'];
-			$user->email = $input['email'];
-			if(trim($input['password']) != ''){
-				$password = $input['password'];
-				$password_hased = Hash::make($password);
-				$user->password = $password_hased;
-			}			
-			$user->save();	
 
-			return Redirect::to_route('profile')->with('status', 'Profile saved')->with_input();
+			if($user->id != 12){
+				$user->first_name = $input['first_name'];
+				$user->last_name = $input['last_name'];
+				$user->email = $input['email'];
+				if(trim($input['password']) != ''){
+					$password = $input['password'];
+					$password_hased = Hash::make($password);
+					$user->password = $password_hased;
+				}			
+				$user->save();
+				$status = 'Profile saved';
+			} else {
+				$status = 'Cannot change demo user';
+			}
+
+			return Redirect::to_route('profile')->with('status', $status)->with_input();
 		}
 	}
 

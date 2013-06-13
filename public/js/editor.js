@@ -40,8 +40,10 @@ OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 var kitInstruments = [
     {
         'name':'Crash',
-        'values' : ['x', 'X', 'S', 'C'],
-        'valueNames' : ['Crash', 'Accented Crash', 'Splash', 'China']
+        'values' : ['x', 'X'],
+        /*'values' : ['x', 'X', 'S', 'C'],*/
+        'valueNames' : ['Crash', 'Accented Crash']
+        /*'valueNames' : ['Crash', 'Accented Crash', 'Splash', 'China']*/
     },
     {
         'name':'Tom 1',
@@ -65,8 +67,10 @@ var kitInstruments = [
     },
     {
         'name':'Snare',
-        'values' : ['o', 'O', 'x', 'X', '@', 'g', 'f', 'd', 'b'],
-        'valueNames' : ['Normal note', 'Accented note', 'Cross stick', 'Accented Cross stick', 'Rimshot', 'Ghost note', 'Flam', 'Drag', 'Roll']
+        //'values' : ['o', 'O', 'x', 'X', '@', 'g', 'f', 'd', 'b'],
+        'values' : ['o', 'O'],
+        'valueNames' : ['Normal note', 'Accented note']
+        /*'valueNames' : ['Normal note', 'Accented note', 'Cross stick', 'Accented Cross stick', 'Rimshot', 'Ghost note', 'Flam', 'Drag', 'Roll']*/
     },
 
     {
