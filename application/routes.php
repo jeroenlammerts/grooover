@@ -34,11 +34,11 @@
 
 Route::get('/', array('as' => 'home', 'uses' => 'home@index'));
 Route::get('patterns', array('as' => 'patterns', 'uses' => 'patterns@index'));
-Route::get('pattern/(:num)', array('as' => 'pattern_detail', 'uses' => 'patterns@editor'));
+Route::get('pattern/(:num)', array('as' => 'pattern_detail', 'uses' => 'patterns@pattern'));
 Route::get('editor/(:num?)', array('as' => 'editor', 'uses' => 'patterns@editor'));
-Route::get('editor/json', array('as' => 'editor', 'uses' => 'patterns@json'));
+//Route::get('editor/json', array('as' => 'editor', 'uses' => 'patterns@json'));
 Route::get('about', array('as' => 'about', 'uses' => 'home@about'));
-//Route::get('help', array('as' => 'help', 'uses' => 'home@index'));
+Route::get('help', array('as' => 'help', 'uses' => 'home@help'));
 Route::get('login', array('as' => 'login', 'uses' => 'user@index'));
 Route::get('register', array('as' => 'register', 'uses' => 'user@register'));
 Route::get('register-activate', array('as' => 'register_finished', 'uses' => 'user@register_finished'));

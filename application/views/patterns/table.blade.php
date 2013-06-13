@@ -3,37 +3,49 @@
 			<thead>
 				<tr>
 					<th>Name</th>
-					<th>Time</th>
+					@if(!isset($page) || isset($page) && $page != 'home')
+						<th>Time</th>
+					@endif
 					<th>Type</th>
 					<th>Genre</th>
-					<th>Score</th>
+					<th class="rating">Rating</th>
 					<th>Video</th>
+					@if(!isset($page) || isset($page) && $page != 'home')
+						<th>&nbsp;</th>
+					@endif
 				</tr>
 			</thead>
 			<tbody>
 				@foreach($patterns->results as $pattern)
-				<tr id="pattern_{{ $pattern->id }}"@if($pattern->affiliate) class="affiliate"@endif>
+				<tr@if($pattern->affiliate) class="affiliate"@endif>
 					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->title }}</a></td>
-					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->time }}</a></td>
+					@if(!isset($page) || isset($page) && $page != 'home')
+						<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->time }}</a></td>
+					@endif
 					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->type }}</a></td>
 					<td><a href="{{ $pattern->link }}"@if($pattern->affiliate) target="_blank"@endif>{{ $pattern->genre }}</a></td>
 					<td>
-						<i class="icon-star"></i>
-						<i class="icon-star"></i>
-						<i class="icon-star"></i>
-						<i class="icon-star-empty"></i>
-						<i class="icon-star-empty"></i>
+						@for ($i = 1; $i <= 5; $i++)
+							<i class="icon-star@if($pattern->score < $i)-empty@endif"></i>
+						@endfor
 					</td>
 					<td>@if(trim($pattern->youtube) != '')<i class="icon-facetime-video"></i>@endif</td>
-					<td>
-						@if(!$pattern->affiliate)
-						<div class="btn-group">
-							<a href="#" class="btn add_to_favourite@if($pattern->favourite) active@endif" title="Add to my favourites"><i class="icon-star"></i></a>
-							<a href="#" class="btn thumb_up"><i class="icon-thumbs-up"></i></a>
-							<a href="#" class="btn thumb_down"><i class="icon-thumbs-down"></i></a>
-						</div>
-						@endif
-					</td>
+					@if(!isset($page) || isset($page) && $page != 'home')	
+						<td>
+							@if(Auth::check())
+							<div class="btn-group">
+								<a href="#" id="pattern_favourite_{{ $pattern->id }}" class="btn add_to_favourite 
+								@if($pattern->favourite) 
+									active 
+								@endif
+								@if(isset($page) && $page == 'favourites') 
+									favourites_page 
+								@endif
+								" title="Add to my favourites"><i class="icon-star"></i></a>
+							</div>
+							@endif
+						</td>
+					@endif
 				</tr>	
 				@endforeach							
 			</tbody>

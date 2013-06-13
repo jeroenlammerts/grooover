@@ -9,10 +9,10 @@ $(document).ready(function(){
 
 		var link = $(this);
 
-		var pattern_id = $(this).parent().parent().parent().attr('id').replace('pattern_', '');
+		var pattern_id = $(this).attr('id').replace('pattern_favourite_', '');
 
 		$.ajax({
-			url: 'add_to_favourite',
+			url: '/add_to_favourite',
 			type: 'POST',
 			data: { pattern_id: pattern_id },
 			success: function(data){
@@ -21,9 +21,17 @@ $(document).ready(function(){
 				} else {
 					link.removeClass('active');
 				}
+				if(link.hasClass('favourites_page')){
+					window.location.reload();
+				}
 			}
 		});
 
+	});
+
+	$('.faq a').click(function(e){
+		e.preventDefault();
+		$(this).next('p').slideToggle();
 	});
 
 });

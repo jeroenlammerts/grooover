@@ -1,19 +1,24 @@
 @layout('master')
 @section('content')
 
-
-
 				<div class="row">
 					<div class="span12">
-						<h2>Pattern editor</h2>					
+						<h2>
+							@if($page == 'editor')
+								Pattern editor
+							@else  
+								{{ $pattern->title }}
+							@endif
+						</h2>					
 					</div>
 				</div>	
 				<div class="row">
 					<div class="span12" id="editor_wrap_container">
 
-						{{ Form::open('pattern', 'POST', array('id' => 'editor_form')) }}
-						{{ Form::hidden('pattern_id', $pattern_id) }}
-
+						@if($page == 'editor')
+							{{ Form::open('pattern', 'POST', array('id' => 'editor_form')) }}
+							{{ Form::hidden('pattern_id', $pattern_id) }}
+						@endif
 
 					    <section class='editor_container active' id='params'>
 					        <div id='paramsleft_container'>
@@ -130,13 +135,12 @@
 					        </span>
 					    </section>
 					    
-					    
-
 					    <textarea id='save_textarea' name="data" spellcheck='false'>{{ $pattern->data }}</textarea>
 
 					</div>
 				</div>	
 
+				@if($page == 'editor')
 				<div id="editor_info" class="form-inline">
 					<legend>Settings</legend>
 					<div class="row">
@@ -179,6 +183,54 @@
 						</div>
 					</div>
 				</div>
+				@else
+				<legend>Info</legend>
+				<div class="row">
+					<div class="span6">
+						<table class="table pattern_info">
+							<tr>
+								<th>Type</th>
+								<td>
+									@foreach($pattern_types as $type)
+										@if($type->id == $pattern->pattern_type_id)
+											{{ $type->name }}
+										@endif
+									@endforeach
+								</td>
+							</tr>
+							<tr>
+								<th>Genre</th>
+								<td>
+									@foreach($genres as $genre)
+										@if($genre->id == $pattern->genre_id)
+											{{ $genre->name }}
+										@endif
+									@endforeach
+								</td>
+							</tr>
+							<tr>
+								<th>Time</th>
+								<td>{{ date('H:i:s', strtotime($pattern->time)) }}</td>
+							</tr>
+							<tr>
+								<th>Score</th>
+								<td>
+									<i class="icon-star"></i>
+									<i class="icon-star"></i>
+									<i class="icon-star"></i>
+									<i class="icon-star-empty"></i>
+									<i class="icon-star-empty"></i>								
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="span6">					
+						@if(Auth::check())
+						<a href="#" id="pattern_favourite_{{ $pattern->id }}" class="btn add_to_favourite@if($pattern->favourite) active@endif"><i class="icon-star"></i> add to favourite</a>
+						@endif
+					</div>		
+				</div>	
+				@endif
 
 				<div id="video_container"@if(trim($pattern->youtube) != '') class="visible"@endif>
 					<legend>Video</legend>
@@ -243,10 +295,10 @@
 					</div>
 
 				</div>
-
-			    {{ Form::button('Save', array('class' => 'btn btn-large pull-right', 'id' => 'save_btn')) }}
-			    {{ Form::close() }}
-
+				@if($page == 'editor')
+				    {{ Form::button('Save', array('class' => 'btn btn-large pull-right', 'id' => 'save_btn')) }}
+				    {{ Form::close() }}
+				@endif
 
 <div id="deleteWindow" class="modal hide fade">
     <div class="modal-header">

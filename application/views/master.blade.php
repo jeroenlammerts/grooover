@@ -4,6 +4,7 @@
 	<title>Grooover | grooves, fills, breaks | @if(isset($title)) {{ $title }} @endif</title>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
 	{{ HTML::style('css/bootstrap.min.css') }}
 	{{ HTML::style('css/bootstrap-responsive.css') }}
 	{{ HTML::style('css/style.css') }}
@@ -12,7 +13,7 @@
 
 	<!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
 	<!--[if lt IE 9]>
-	  <script src="js/html5shiv.js"></script>
+	  <script src="/js/html5shiv.js"></script>
 	<![endif]-->
 </head>
 <body id="body">
@@ -23,7 +24,7 @@
 					<a href="{{ URL::to_route('home') }}"><h1>Grooover <span>grooves, fills, breaks</span></h1></a>
 				</div>
 				<div class="span4">
-					<img src="img/ad3.jpg" alt="" id="top_ad" />
+					<img src="/img/ad3.jpg" alt="" id="top_ad" />
 				</div>				
 			</div>
 			<div class="row">
@@ -37,6 +38,7 @@
 								<li{{ Request::route()->is('editor') ? ' class="active"' : '' }}><a href="{{ URL::to_route('editor') }}">Editor</a></li>
 								@endif
 								<li{{ Request::route()->is('about') ? ' class="active"' : '' }}><a href="{{ URL::to_route('about') }}">About</a></li>
+								<li{{ Request::route()->is('help') ? ' class="active"' : '' }}><a href="{{ URL::to_route('help') }}">Help</a></li>
 							</ul>
 
 							{{ Form::open('patterns', 'GET', array('class' => 'navbar-search')) }}
@@ -104,7 +106,7 @@
 	<footer>
 		<div class="container">
 			<hr/>
-			<p>&copy; Grooover 2013</p>
+			<p>&copy; BLProductions 2013</p>
 		</div>
 	</footer>
 	{{ HTML::script('js/jquery.js') }}

@@ -4,6 +4,7 @@
 <div class="row">
 	<div class="span12">
 		<h2>Patterns</h2>
+		<p>Here you can search for patterns in Grooover</p>
 	</div>
 </div>				
 <div class="row">
@@ -47,9 +48,9 @@
 		</div>		
 	</div>
 	<div class="span2">
-		<img src="img/ad1.jpg" alt=""/>
-		<img src="img/ad2.jpg" alt=""/>
-		<img src="img/ad4.jpg" alt=""/>
+		<img src="/img/ad1.jpg" alt=""/>
+		<img src="/img/ad2.jpg" alt=""/>
+		<img src="/img/ad4.jpg" alt=""/>
 	</div>
 </div>
 

@@ -49,17 +49,9 @@ class Patterns_Controller extends Base_Controller
 				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
 			}
 
-			$pattern->favourite = false;
-			if(Auth::check()){
-				$link = $user = DB::table('favourites')
-									->where('user_id', '=', Auth::user()->id)
-									->where('pattern_id', '=', $pattern->id)
-									->get();
-
-				if(count($link)){
-					$pattern->favourite = true;
-				} 
-			}
+			$pattern_obj = Pattern::find($pattern->id);
+			$pattern->score = $pattern_obj->get_score();
+			$pattern->favourite = $pattern_obj->has_auth_user_favourite();
 
 		}
 
@@ -99,20 +91,12 @@ class Patterns_Controller extends Base_Controller
 			if($pattern->affiliate){
 				$pattern->link = $pattern->affiliate_link;
 			} else {
-				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
+				$pattern->link = URL::to_route('editor', array($pattern->id));
 			}
 
-			$pattern->favourite = false;
-			if(Auth::check()){
-				$link = $user = DB::table('favourites')
-									->where('user_id', '=', Auth::user()->id)
-									->where('pattern_id', '=', $pattern->id)
-									->get();
-
-				if(count($link)){
-					$pattern->favourite = true;
-				} 
-			}
+			$pattern_obj = Pattern::find($pattern->id);
+			$pattern->score = $pattern_obj->get_score();
+			$pattern->favourite = $pattern_obj->has_auth_user_favourite();
 
 		}						
 
@@ -138,7 +122,6 @@ class Patterns_Controller extends Base_Controller
 						->left_join('genres', 'genres.id', '=', 'patterns.genre_id')
 						->left_join('pattern_types', 'pattern_types.id', '=', 'patterns.pattern_type_id')
 						->select(array('patterns.id', 'patterns.title', 'genres.name as genre', 'time', 'pattern_types.name as type', 'patterns.youtube as youtube', 'patterns.affiliate', 'patterns.affiliate_link'))
-						->where('patterns.user_id', '=', Auth::user()->id)
 						->where_in('patterns.id', $fav_array)
 						->order_by('patterns.title', 'asc')
 						->paginate(10);
@@ -151,6 +134,8 @@ class Patterns_Controller extends Base_Controller
 				$pattern->link = URL::to_route('pattern_detail', array($pattern->id));
 			}
 
+			$pattern_obj = Pattern::find($pattern->id);
+			$pattern->score = $pattern_obj->get_score();
 			$pattern->favourite = true;
 
 		}						
@@ -158,12 +143,12 @@ class Patterns_Controller extends Base_Controller
 		$title = "My favourites";
 		return View::make('user.patterns')
 			->with('title', $title)
-			->with('patterns', $patterns);
+			->with('patterns', $patterns)
+			->with('page', 'favourites');
 	}
 
 	public function get_editor($pattern_id = 0)
 	{
-
 		if($pattern_id){
 			$pattern = Pattern::find($pattern_id);
 		} else {
@@ -193,10 +178,46 @@ class Patterns_Controller extends Base_Controller
 			->with('pattern_id', $pattern_id)
 			->with('pattern', $pattern)
 			->with('pattern_types', $pattern_types)
-			->with('genres', $genres);
+			->with('genres', $genres)
+			->with('page', 'editor');
 			//->with('artists', $artists)
 			//->with('songs', $songs);
 	}
+
+	public function get_pattern($pattern_id = 0)
+	{
+		$pattern = Pattern::find($pattern_id);
+
+		$pattern->favourite = false;
+		if(Auth::check()){
+			$link = $user = DB::table('favourites')
+								->where('user_id', '=', Auth::user()->id)
+								->where('pattern_id', '=', $pattern->id)
+								->get();
+
+			if(count($link)){
+				$pattern->favourite = true;
+			} 
+		}
+
+	
+		$pattern_types = DB::table('pattern_types')->order_by('name', 'asc')->get();
+		$genres = DB::table('genres')->order_by('name', 'asc')->get();
+		//$artists = DB::table('artists')->order_by('name', 'asc')->get();
+		//$songs = DB::table('songs')->order_by('name', 'asc')->get();		
+
+		$title = "Editor";
+		return View::make('editor.index')
+			->with('title', $title)
+			->with('pattern_id', $pattern_id)
+			->with('pattern', $pattern)
+			->with('pattern_types', $pattern_types)
+			->with('genres', $genres)
+			->with('page', 'pattern');
+			//->with('artists', $artists)
+			//->with('songs', $songs);
+
+	}	
 
 	public function post_pattern()
 	{
@@ -222,14 +243,6 @@ class Patterns_Controller extends Base_Controller
 
 		return Redirect::to_route('my_patterns');
 
-	}
-
-	public function get_pattern($pattern_id)
-	{
-		$title = "Pattern detail";
-		return View::make('patterns.detail')
-			->with('title', $title)
-			->with('pattern_id', $pattern_id);
 	}
 
 	public function post_add_to_favourite()
